@@ -230,7 +230,7 @@ describe('Game', () => {
       t.start(new Date());
       t.end(new Date());
     });
-    game.startNextRound();
+    game.startNextRound(new Date());
     expect(game.currentRoundIndex).toBe(1);
     expect(game.getCurrentRound()).toBe(game.rounds[1]);
   });
@@ -250,7 +250,7 @@ describe('Game', () => {
       t.start(new Date());
       t.end(new Date());
     });
-    game.startNextRound();
+    game.startNextRound(new Date());
     expect(game.rounds[1].turns).toHaveLength(2);
   });
 
@@ -264,7 +264,7 @@ describe('Game', () => {
       () => new Category('x'),
       host.id
     );
-    expect(() => game.startNextRound()).toThrow('Current round is not completed');
+    expect(() => game.startNextRound(new Date())).toThrow('Current round is not completed');
   });
 
   it('should finish game after 5th round', () => {
@@ -284,7 +284,7 @@ describe('Game', () => {
         t.start(new Date());
         t.end(new Date());
       });
-      game.startNextRound();
+      game.startNextRound(new Date());
     }
     expect(game.status).toBe('FINISHED');
     expect(game.finishedAt).not.toBeNull();
@@ -354,11 +354,11 @@ describe('Game', () => {
     turnBob.submitAnswer('x', new Date());
     turnBob.answers[0].validate(true, new Date());
     turnBob.end(new Date());
-    game.startNextRound();
+    game.startNextRound(new Date());
     
     for (let i = 1; i < 5; i++) {
       game.rounds[i].turns.forEach(t => { t.start(new Date()); t.end(new Date()); });
-      game.startNextRound();
+      game.startNextRound(new Date());
     }
     expect(game.winner).toBe(host);
   });
@@ -377,13 +377,13 @@ describe('Game', () => {
     for (let i = 0; i < 5; i++) {
       const round = game.rounds[i];
       round.turns.forEach(t => { t.start(new Date()); t.end(new Date()); });
-      if (i < 4) game.startNextRound();
+      if (i < 4) game.startNextRound(new Date());
     }
     expect(game.winner).toBeNull();
   });
 
   it('should throw when finishing if not IN_PROGRESS', () => {
     const game = new Game();
-    expect(() => game.finish()).toThrow('Game is not in progress');
+    expect(() => game.finish(new Date())).toThrow('Game is not in progress');
   });
 });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Player } from './Player.js';
+import { Player, type PlayerRole } from './Player.js';
 
 describe('Player', () => {
   it('should create a player with name and role', () => {
@@ -49,6 +49,6 @@ describe('Player', () => {
   });
 
   it('should only allow host or player role', () => {
-    expect(() => new Player('Alice', 'spectator' as any)).toThrow('Role must be host or player');
+    expect(() => new Player('Alice', 'spectator' as unknown as PlayerRole)).toThrow('Role must be host or player');
   });
 });

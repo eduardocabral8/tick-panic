@@ -2,6 +2,7 @@
   "name": "15-seconds",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "description": "Juego multijugador 15 segundos",
   "scripts": {
     "test": "pnpm --filter domain test",

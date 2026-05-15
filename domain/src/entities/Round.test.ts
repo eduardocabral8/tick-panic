@@ -78,12 +78,12 @@ describe('Round', () => {
 
   it('should check completed when all turns are done', () => {
     const round = new Round('game-1', 1, new Category('frutas'));
-    const t1 = round.createTurn('player-1');
-    const t2 = round.createTurn('player-2');
-    t1.start(new Date());
-    t1.end(new Date());
-    t2.start(new Date());
-    t2.end(new Date());
+    round.createTurn('player-1');
+    round.createTurn('player-2');
+    round.turns[0].start(new Date());
+    round.turns[0].end(new Date());
+    round.turns[1].start(new Date());
+    round.turns[1].end(new Date());
     round.checkCompleted();
     expect(round.status).toBe('COMPLETED');
   });
@@ -91,7 +91,7 @@ describe('Round', () => {
   it('should not mark completed if any turn is still active', () => {
     const round = new Round('game-1', 1, new Category('frutas'));
     const t1 = round.createTurn('player-1');
-    const t2 = round.createTurn('player-2');
+    round.createTurn('player-2');
     t1.start(new Date());
     t1.end(new Date());
     round.checkCompleted();

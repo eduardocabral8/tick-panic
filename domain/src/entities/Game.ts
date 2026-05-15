@@ -82,7 +82,7 @@ export class Game {
     this._createTurnsForRound(0);
   }
 
-  startNextRound(): void {
+  startNextRound(now: Date): void {
     if (this._status !== 'IN_PROGRESS') {
       throw new Error('Game is not in progress');
     }
@@ -94,13 +94,13 @@ export class Game {
 
     this._currentRoundIndex += 1;
     if (this._currentRoundIndex >= 5) {
-      this.finish();
+      this.finish(now);
     } else {
       this._createTurnsForRound(this._currentRoundIndex);
     }
   }
 
-  finish(): void {
+  finish(now: Date): void {
     if (this._status !== 'IN_PROGRESS') {
       throw new Error('Game is not in progress');
     }
@@ -118,7 +118,7 @@ export class Game {
     }
     this._winner = winners.length === 1 ? winners[0] : null;
     this._status = 'FINISHED';
-    this._finishedAt = new Date();
+    this._finishedAt = now;
   }
 
   getCurrentRound(): Round | null {
