@@ -1,0 +1,13 @@
+{
+  "name": "15-seconds",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Juego multijugador 15 segundos",
+  "scripts": {
+    "test": "pnpm --filter domain test"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
