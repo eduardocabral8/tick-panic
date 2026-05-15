@@ -1,0 +1,20 @@
+#!/bin/sh
+
+npx lint-staged
+
+changed_files=$(git diff --cached --name-only)
+
+if echo "$changed_files" | grep -q "^domain/"; then
+  echo "Running domain tests..."
+  pnpm --filter domain test || exit 1
+fi
+
+if echo "$changed_files" | grep -q "^apps/backend/"; then
+  echo "Running backend tests..."
+  pnpm --filter backend test || exit 1
+fi
+
+if echo "$changed_files" | grep -q "^apps/frontend/"; then
+  echo "Running frontend tests..."
+  pnpm --filter frontend test || exit 1
+fi
