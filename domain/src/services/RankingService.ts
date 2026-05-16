@@ -15,6 +15,9 @@ export class RankingService {
 
     const entries: { playerId: string; totalScore: number }[] = [];
     for (const [playerId, totalScore] of scores.entries()) {
+      if (totalScore < 0) {
+        throw new Error('Score cannot be negative');
+      }
       entries.push({ playerId, totalScore });
     }
 

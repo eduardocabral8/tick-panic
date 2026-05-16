@@ -80,6 +80,13 @@ describe('RankingService', () => {
     expect(ranking[1].totalScore).toBe(1);
   });
 
+  it('should throw if any score is negative', () => {
+    const game = {
+      getPlayerScores: () => new Map([['p1', -1], ['p2', 2]]),
+    } as unknown as Game;
+    expect(() => service.getFinalRanking(game)).toThrow('Score cannot be negative');
+  });
+
   it('should skip rank number after ties (1224 pattern)', () => {
     const game = new Game();
     const alice = new Player('Alice', 'host');
