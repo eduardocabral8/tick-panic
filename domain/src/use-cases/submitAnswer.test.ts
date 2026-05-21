@@ -8,10 +8,10 @@ import { AnswerRepository } from '../repositories/AnswerRepository.js';
 
 describe('submitAnswer', () => {
   it('should submit an answer on an active turn', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -34,10 +34,10 @@ describe('submitAnswer', () => {
   });
 
   it('should throw if turn is not active', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -50,10 +50,10 @@ describe('submitAnswer', () => {
   });
 
   it('should throw if answer text is empty', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -67,10 +67,10 @@ describe('submitAnswer', () => {
   });
 
   it('should throw if time limit exceeded', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -83,5 +83,23 @@ describe('submitAnswer', () => {
     const answerRepo: AnswerRepository = { save: vi.fn(), findById: vi.fn(), findAll: vi.fn() };
     const now = new Date(startedAt.getTime() + (turn.timeLimit + 1) * 1000);
     expect(() => submitAnswer(turn.id, 'respuesta', now, turnRepo, answerRepo)).toThrow('Time limit exceeded');
+  });
+
+  it('should throw if player has already submitted an answer for this turn', () => {
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
+    game.addPlayer(host);
+    game.addPlayer(new Player('Bob', 'player', new Date()));
+    game.start(
+      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      (cats) => cats[0],
+      host.id
+    );
+    const turn = game.rounds[0].turns[0];
+    turn.start(new Date());
+    turn.submitAnswer('first answer', new Date());
+    const turnRepo: TurnRepository = { save: vi.fn(), findById: vi.fn(() => turn), findByRoundId: vi.fn(), findAll: vi.fn() };
+    const answerRepo: AnswerRepository = { save: vi.fn(), findById: vi.fn(), findAll: vi.fn() };
+    expect(() => submitAnswer(turn.id, 'second answer', new Date(), turnRepo, answerRepo)).toThrow('Player has already submitted an answer for this turn');
   });
 });

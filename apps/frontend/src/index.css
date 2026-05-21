@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+    min-width: 320px;
+  }
+
+  input {
+    @apply bg-transparent text-text-primary font-sans;
+  }
+}
+
+@layer utilities {
+  .timer-pulse {
+    animation: timer-pulse 1s ease-in-out infinite;
+  }
+
+  .timer-pulse-aggressive {
+    animation: timer-pulse-aggressive 0.5s ease-in-out infinite;
+  }
+
+  @keyframes timer-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+
+  @keyframes timer-pulse-aggressive {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  @keyframes input-flash {
+    0% { border-bottom-color: #00ff88; }
+    100% { border-bottom-color: #ffffff; }
+  }
+}

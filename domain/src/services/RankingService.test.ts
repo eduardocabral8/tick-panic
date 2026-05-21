@@ -8,15 +8,15 @@ describe('RankingService', () => {
   const service = new RankingService();
 
   it('should return empty array for game with no players', () => {
-    const game = new Game();
+    const game = new Game(new Date());
     const ranking = service.getFinalRanking(game);
     expect(ranking).toEqual([]);
   });
 
   it('should sort players by total score descending', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
-    const bob = new Player('Bob', 'player');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
+    const bob = new Player('Bob', 'player', new Date());
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
@@ -28,9 +28,7 @@ describe('RankingService', () => {
     const turnHost = game.rounds[0].turns.find(t => t.playerId === host.id)!;
     turnHost.start(new Date());
     turnHost.submitAnswer('a', new Date());
-    turnHost.submitAnswer('b', new Date());
     turnHost.answers[0].validate(true, new Date());
-    turnHost.answers[1].validate(true, new Date());
     turnHost.end(new Date());
 
     const turnBob = game.rounds[0].turns.find(t => t.playerId === bob.id)!;
@@ -38,6 +36,18 @@ describe('RankingService', () => {
     turnBob.submitAnswer('x', new Date());
     turnBob.answers[0].validate(true, new Date());
     turnBob.end(new Date());
+
+    game.startNextRound(new Date());
+    
+    const turnHostR2 = game.rounds[1].turns.find(t => t.playerId === host.id)!;
+    turnHostR2.start(new Date());
+    turnHostR2.submitAnswer('b', new Date());
+    turnHostR2.answers[0].validate(true, new Date());
+    turnHostR2.end(new Date());
+
+    const turnBobR2 = game.rounds[1].turns.find(t => t.playerId === bob.id)!;
+    turnBobR2.start(new Date());
+    turnBobR2.end(new Date());
 
     const ranking = service.getFinalRanking(game);
     expect(ranking).toHaveLength(2);
@@ -50,9 +60,9 @@ describe('RankingService', () => {
   });
 
   it('should assign same rank to tied players', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
-    const bob = new Player('Bob', 'player');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
+    const bob = new Player('Bob', 'player', new Date());
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
@@ -88,11 +98,11 @@ describe('RankingService', () => {
   });
 
   it('should skip rank number after ties (1224 pattern)', () => {
-    const game = new Game();
-    const alice = new Player('Alice', 'host');
-    const bob = new Player('Bob', 'player');
-    const charlie = new Player('Charlie', 'player');
-    const diana = new Player('Diana', 'player');
+    const game = new Game(new Date());
+    const alice = new Player('Alice', 'host', new Date());
+    const bob = new Player('Bob', 'player', new Date());
+    const charlie = new Player('Charlie', 'player', new Date());
+    const diana = new Player('Diana', 'player', new Date());
     game.addPlayer(alice);
     game.addPlayer(bob);
     game.addPlayer(charlie);
@@ -106,9 +116,7 @@ describe('RankingService', () => {
     const turnAlice = game.rounds[0].turns.find(t => t.playerId === alice.id)!;
     turnAlice.start(new Date());
     turnAlice.submitAnswer('a', new Date());
-    turnAlice.submitAnswer('b', new Date());
     turnAlice.answers[0].validate(true, new Date());
-    turnAlice.answers[1].validate(true, new Date());
     turnAlice.end(new Date());
 
     const turnBob = game.rounds[0].turns.find(t => t.playerId === bob.id)!;
@@ -126,6 +134,26 @@ describe('RankingService', () => {
     const turnDiana = game.rounds[0].turns.find(t => t.playerId === diana.id)!;
     turnDiana.start(new Date());
     turnDiana.end(new Date());
+
+    game.startNextRound(new Date());
+
+    const turnAliceR2 = game.rounds[1].turns.find(t => t.playerId === alice.id)!;
+    turnAliceR2.start(new Date());
+    turnAliceR2.submitAnswer('b', new Date());
+    turnAliceR2.answers[0].validate(true, new Date());
+    turnAliceR2.end(new Date());
+    
+    const turnBobR2 = game.rounds[1].turns.find(t => t.playerId === bob.id)!;
+    turnBobR2.start(new Date());
+    turnBobR2.end(new Date());
+
+    const turnCharlieR2 = game.rounds[1].turns.find(t => t.playerId === charlie.id)!;
+    turnCharlieR2.start(new Date());
+    turnCharlieR2.end(new Date());
+
+    const turnDianaR2 = game.rounds[1].turns.find(t => t.playerId === diana.id)!;
+    turnDianaR2.start(new Date());
+    turnDianaR2.end(new Date());
 
     const ranking = service.getFinalRanking(game);
     expect(ranking).toHaveLength(4);

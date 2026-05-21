@@ -11,14 +11,14 @@ export class AuthService {
     private tokenGenerator: TokenGeneratorPort
   ) {}
 
-  async register(username: string, password: string, role: 'admin' | 'player'): Promise<User> {
+  async register(username: string, password: string, role: 'admin' | 'player', now: Date): Promise<User> {
     const trimmed = username.trim();
     const existing = this.userRepo.findByUsername(trimmed);
     if (existing) {
       throw new Error('Username already exists');
     }
     const passwordHash = await this.passwordHasher.hash(password);
-    const user = new User(trimmed, passwordHash, role);
+    const user = new User(trimmed, passwordHash, role, now);
     this.userRepo.save(user);
     return user;
   }

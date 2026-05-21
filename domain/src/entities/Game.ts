@@ -13,10 +13,12 @@ export class Game {
   readonly createdAt: Date;
   private _finishedAt: Date | null = null;
   private _winner: Player | null = null;
+  private _categories: Category[] = [];
+  private _randomizer: ((categories: Category[]) => Category) | null = null;
 
-  constructor() {
+  constructor(now: Date) {
     this.id = crypto.randomUUID();
-    this.createdAt = new Date();
+    this.createdAt = now;
   }
 
   get status(): GameStatus {
@@ -71,6 +73,9 @@ export class Game {
     if (categories.length < 5) {
       throw new Error('At least 5 categories are required');
     }
+
+    this._categories = categories;
+    this._randomizer = randomizer;
 
     for (let i = 1; i <= 5; i++) {
       const category = randomizer(categories);
@@ -150,8 +155,17 @@ export class Game {
 
   private _createTurnsForRound(roundIndex: number): void {
     const round = this._rounds[roundIndex];
+    const available = [...this._categories];
     for (const player of this._players) {
-      round.createTurn(player.id);
+      if (available.length === 0) {
+        available.push(...this._categories);
+      }
+      const category = this._randomizer!(available);
+      round.createTurn(player.id, category);
+      const idx = available.findIndex(c => c.id === category.id);
+      if (idx !== -1) {
+        available.splice(idx, 1);
+      }
     }
   }
 }

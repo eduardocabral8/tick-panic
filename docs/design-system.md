@@ -19,6 +19,32 @@ Every element has a purpose. If it does not communicate game state, it does not 
 
 No gradients. No transparency for decoration.
 
+## Tailwind Configuration
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        background: '#000000',
+        'text-primary': '#ffffff',
+        'text-secondary': '#666666',
+        'text-tertiary': '#333333',
+        accent: '#00ff88',
+        error: '#ff2d00',
+      },
+      fontFamily: {
+        sans: ['"Space Grotesk"', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'monospace'],
+      },
+    },
+  },
+};
+```
+
+Components use Tailwind utility classes directly. No custom CSS components needed.
+
 ## Typography
 
 | Role | Font | Size | Weight |

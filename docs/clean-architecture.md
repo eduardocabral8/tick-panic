@@ -14,7 +14,7 @@ Dependency direction: inward. Domain is the center. Nothing knows about the doma
                     ▼
 ┌─────────────────────────────────────────────┐
 │           apps/backend                      │
-│  Fastify, routes, WS handlers, SQLite      │
+│  Fastify, socket.io, controllers, in-memory repos │
 │  ───► imports domain (use-cases, entities) │
 │  ───► implements repositories (ports)      │
 └─────────────────────────────────────────────┘
@@ -39,9 +39,9 @@ Dependency direction: inward. Domain is the center. Nothing knows about the doma
 
 ### Backend Layer
 - Knows about the domain (imports from it)
-- Implements domain repository interfaces with SQLite
+- Implements domain repository interfaces with in-memory stores
 - Implements domain service interfaces with Node.js APIs (`setTimeout`)
-- Handles HTTP requests and WebSocket connections
+- Handles HTTP requests and WebSocket connections via socket.io
 - Maps domain errors to HTTP status codes
 - Does NOT know about React or frontend internals
 
@@ -57,12 +57,12 @@ Dependency direction: inward. Domain is the center. Nothing knows about the doma
 ### Allowed
 
 ```typescript
-// backend/src/repositories/SqliteGameRepository.ts
+// backend/src/repositories/InMemoryGameRepository.ts
 import { GameRepository } from '@15-seconds/domain';
 // ✅ Implements a domain port
 
-// backend/src/routes/gameRoutes.ts
-import { CreateGame } from '@15-seconds/domain';
+// backend/src/controllers/authController.ts
+import { createUser } from '@15-seconds/domain';
 // ✅ Uses a domain use case
 
 // frontend/src/hooks/useWebSocket.ts
@@ -89,7 +89,7 @@ import { FastifyRequest } from 'fastify';
 import { Game } from '@15-seconds/domain';
 // ❌ Frontend cannot import domain entities
 
-// backend/src/server.ts
+// backend/src/main.ts
 import App from '../../frontend/src/App.tsx';
 // ❌ Backend cannot import frontend
 
@@ -103,11 +103,14 @@ const dbPath = process.env.DB_PATH;
 | Port (Domain Interface) | Adapter (Backend Implementation) |
 |------------------------|----------------------------------|
 | `TimerPort` | `NodeTurnTimer.ts` (uses `setTimeout`) |
-| `GameRepository` | `SqliteGameRepository.ts` |
-| `PlayerRepository` | `SqlitePlayerRepository.ts` |
-| `TurnRepository` | `SqliteTurnRepository.ts` |
-| `AnswerRepository` | `SqliteAnswerRepository.ts` |
-| `RoundRepository` | `SqliteRoundRepository.ts` |
-| `CategoryRepository` | `SqliteCategoryRepository.ts` |
+| `PasswordHasherPort` | `BcryptPasswordHasher.ts` (uses `bcrypt`) |
+| `TokenGeneratorPort` | `JwtTokenGenerator.ts` (uses `jsonwebtoken`) |
+| `UserRepository` | `InMemoryUserRepository.ts` |
+| `GameRepository` | `InMemoryGameRepository.ts` |
+| `PlayerRepository` | `InMemoryPlayerRepository.ts` |
+| `TurnRepository` | `InMemoryTurnRepository.ts` |
+| `AnswerRepository` | `InMemoryAnswerRepository.ts` |
+| `RoundRepository` | `InMemoryRoundRepository.ts` |
+| `CategoryRepository` | `InMemoryCategoryRepository.ts` |
 
 The domain defines the contract. The backend fulfills it.

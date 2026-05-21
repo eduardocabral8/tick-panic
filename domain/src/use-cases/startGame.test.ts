@@ -8,10 +8,10 @@ import { CategoryRepository } from '../repositories/CategoryRepository.js';
 
 describe('startGame', () => {
   it('should start a waiting game with enough players and categories', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
       save: vi.fn(),
@@ -31,9 +31,9 @@ describe('startGame', () => {
   });
 
   it('should throw if caller is not the host', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
-    const bob = new Player('Bob', 'player');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
+    const bob = new Player('Bob', 'player', new Date());
     game.addPlayer(host);
     game.addPlayer(bob);
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
@@ -46,8 +46,8 @@ describe('startGame', () => {
   });
 
   it('should throw if less than 2 players', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
@@ -59,10 +59,10 @@ describe('startGame', () => {
   });
 
   it('should throw if less than 5 categories', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
       save: vi.fn(),
@@ -73,10 +73,10 @@ describe('startGame', () => {
   });
 
   it('should throw if game already started', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],

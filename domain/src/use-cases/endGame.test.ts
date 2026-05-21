@@ -7,10 +7,10 @@ import { GameRepository } from '../repositories/GameRepository.js';
 
 describe('endGame', () => {
   it('should finish an in-progress game', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -35,16 +35,16 @@ describe('endGame', () => {
   });
 
   it('should throw if game is not in progress', () => {
-    const game = new Game();
+    const game = new Game(new Date());
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     expect(() => endGame(game.id, new Date(), gameRepo)).toThrow('Game is not in progress');
   });
 
   it('should throw if game is already finished', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],

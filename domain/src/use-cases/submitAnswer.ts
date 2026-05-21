@@ -10,6 +10,9 @@ export function submitAnswer(turnId: string, text: string, now: Date, turnRepo: 
   if (turn.status !== 'ACTIVE') {
     throw new Error('Turn is not active');
   }
+  if (turn.answers.length > 0) {
+    throw new Error('Player has already submitted an answer for this turn');
+  }
   const answer = turn.submitAnswer(text, now);
   answerRepo.save(answer);
   return answer;

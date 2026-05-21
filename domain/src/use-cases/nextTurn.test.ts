@@ -7,10 +7,10 @@ import { GameRepository } from '../repositories/GameRepository.js';
 
 describe('nextTurn', () => {
   it('should return the next pending turn in the current round', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -26,10 +26,10 @@ describe('nextTurn', () => {
   });
 
   it('should advance to next round when no pending turns remain', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -44,10 +44,10 @@ describe('nextTurn', () => {
   });
 
   it('should finish game after 5th round and return null', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],
@@ -70,16 +70,16 @@ describe('nextTurn', () => {
   });
 
   it('should throw if game is not in progress', () => {
-    const game = new Game();
+    const game = new Game(new Date());
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     expect(() => nextTurn(game.id, new Date(), gameRepo)).toThrow('Game is not in progress');
   });
 
   it('should throw if current round has active turn and no pending turns', () => {
-    const game = new Game();
-    const host = new Player('Alice', 'host');
+    const game = new Game(new Date());
+    const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
-    game.addPlayer(new Player('Bob', 'player'));
+    game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
       [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
       (cats) => cats[0],

@@ -21,8 +21,8 @@ export class Round {
     this.gameId = gameId;
     this.roundNumber = roundNumber;
     this.category = category;
-    this.itemCount = 6 - roundNumber;
-    this.timeLimit = this.itemCount;
+    this.itemCount = 1;
+    this.timeLimit = 6 - roundNumber;
   }
 
   get status(): RoundStatus {
@@ -33,11 +33,11 @@ export class Round {
     return this._turns;
   }
 
-  createTurn(playerId: string): Turn {
+  createTurn(playerId: string, category: Category): Turn {
     if (this._turns.some(t => t.playerId === playerId)) {
       throw new Error('Player already has a turn in this round');
     }
-    const turn = new Turn(this.id, playerId, this.timeLimit, this.roundNumber);
+    const turn = new Turn(this.id, playerId, this.timeLimit, this.roundNumber, category);
     this._turns.push(turn);
     return turn;
   }

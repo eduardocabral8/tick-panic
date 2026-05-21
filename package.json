@@ -5,9 +5,11 @@
   "type": "module",
   "description": "Juego multijugador 15 segundos",
   "scripts": {
-    "test": "pnpm --filter domain test",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
     "prepare": "husky",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dev": "pnpm -r --parallel dev"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -19,6 +21,7 @@
     "eslint": "^10.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.4",
+    "tsx": "^4.7.0",
     "typescript": "^5.4.0",
     "typescript-eslint": "^8.59.3"
   },

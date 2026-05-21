@@ -1,0 +1,117 @@
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useGameContext } from '../hooks/GameStateContext.js';
+import { useGameSocket } from '../hooks/useGameSocket.js';
+import { useTimer } from '../hooks/useTimer.js';
+import { useTurn } from '../hooks/useTurn.js';
+import TimerDisplay from '../components/TimerDisplay.js';
+import CategoryDisplay from '../components/CategoryDisplay.js';
+import AnswerInput from '../components/AnswerInput.js';
+import AnswerList from '../components/AnswerList.js';
+import PlayerRow from '../components/PlayerRow.js';
+import RoundIndicator from '../components/RoundIndicator.js';
+
+export default function GamePage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { state } = useGameContext();
+  const { submitAnswer } = useTurn();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const currentPlayerId = localStorage.getItem('currentPlayerId');
+  const isMyTurn = state.currentTurn?.playerId === currentPlayerId;
+  const turnActive = state.currentTurn !== null;
+
+  useGameSocket(id ?? null);
+
+  const { remainingSeconds } = useTimer(
+    state.currentTurn?.timeLimit ?? 0,
+    state.turnStartedAt,
+  );
+
+  const timerExpired = turnActive && remainingSeconds !== null && remainingSeconds <= 0;
+
+  useEffect(() => {
+    setSubmitting(false);
+    setHasSubmitted(false);
+  }, [state.currentTurn?.id]);
+
+  useEffect(() => {
+    if (state.gameStatus === 'FINISHED' && id) {
+      navigate(`/game/${id}/results`);
+    }
+  }, [state.gameStatus, id, navigate]);
+
+  useEffect(() => {
+    if (state.currentTurn === null && state.gameStatus === 'IN_PROGRESS' && id) {
+      navigate(`/game/${id}/turn-results`);
+    }
+  }, [state.currentTurn, state.gameStatus, id, navigate]);
+
+  const handleSubmitAnswer = async (text: string) => {
+    if (!state.currentTurn || !currentPlayerId || submitting || hasSubmitted) {
+      return;
+    }
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      await submitAnswer(state.currentTurn.id, text, currentPlayerId);
+      setHasSubmitted(true);
+    } catch (e) {
+      if (!timerExpired) {
+        setSubmitError((e as Error).message || 'no se pudo enviar la respuesta');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center space-y-section">
+      <RoundIndicator currentRound={state.currentRound} />
+
+      <TimerDisplay
+        remainingSeconds={remainingSeconds}
+        totalSeconds={state.currentTurn?.timeLimit ?? 0}
+        isActive={turnActive}
+        roundNumber={state.currentRound}
+      />
+
+      {state.category && (
+        <CategoryDisplay categoryName={state.category.name} roundNumber={state.currentRound} />
+      )}
+
+      <div className="w-full max-w-xs space-y-element">
+        {!isMyTurn && turnActive && (
+          <div className="font-sans text-sm text-text-secondary lowercase">
+            turno de {state.players.find((p) => p.id === state.currentTurn?.playerId)?.name ?? ''}
+          </div>
+        )}
+        <AnswerInput
+          key={state.currentTurn?.id || 'no-turn'}
+          onSubmit={handleSubmitAnswer}
+          disabled={!isMyTurn || !turnActive || submitting || hasSubmitted}
+          timerExpired={timerExpired}
+        />
+        {submitError && <div className="text-error text-sm">{submitError}</div>}
+      </div>
+
+      <div className="w-full max-w-xs">
+        <AnswerList answers={state.answers} />
+      </div>
+
+      <div className="w-full max-w-xs space-y-element">
+        {state.players.map((player) => (
+          <PlayerRow
+            key={player.id}
+            name={player.name}
+            score={player.score}
+            isHost={player.role === 'host'}
+            isCurrentTurn={player.id === state.currentTurn?.playerId}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

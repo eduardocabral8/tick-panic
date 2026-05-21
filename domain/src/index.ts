@@ -34,3 +34,8 @@ export { finishTurn } from './use-cases/finishTurn.js';
 export { nextTurn } from './use-cases/nextTurn.js';
 export { getRandomCategory } from './use-cases/getRandomCategory.js';
 export { addCategory } from './use-cases/addCategory.js';
+export { createUser } from './use-cases/createUser.js';
+export { loginUser } from './use-cases/loginUser.js';
+export { getAllCategories } from './use-cases/getAllCategories.js';
+export { getGameById } from './use-cases/getGameById.js';
+export { validateAnswer } from './use-cases/validateAnswer.js';

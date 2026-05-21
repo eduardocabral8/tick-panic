@@ -7,7 +7,7 @@ export class User {
   readonly role: UserRole;
   readonly createdAt: Date;
 
-  constructor(username: string, passwordHash: string, role: UserRole) {
+  constructor(username: string, passwordHash: string, role: UserRole, now: Date) {
     const trimmed = username.trim();
     if (trimmed.length === 0) {
       throw new Error('Username is required');
@@ -26,6 +26,6 @@ export class User {
     this.username = trimmed;
     this.passwordHash = passwordHash;
     this.role = role;
-    this.createdAt = new Date();
+    this.createdAt = now;
   }
 }

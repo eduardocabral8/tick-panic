@@ -1,0 +1,36 @@
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { GameStateProvider } from './hooks/GameStateContext.js';
+import LoginPage from './pages/LoginPage.js';
+import LobbyPage from './pages/LobbyPage.js';
+import WaitingRoomPage from './pages/WaitingRoomPage.js';
+import GamePage from './pages/GamePage.js';
+import TurnResultsPage from './pages/TurnResultsPage.js';
+import FinalRankingPage from './pages/FinalRankingPage.js';
+
+function App() {
+  return (
+    <div className="min-h-screen bg-background px-page py-section">
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/lobby" element={<LobbyPage />} />
+        <Route
+          path="/game/:id/*"
+          element={
+            <GameStateProvider>
+              <Routes>
+                <Route path="waiting" element={<WaitingRoomPage />} />
+                <Route path="play" element={<GamePage />} />
+                <Route path="turn-results" element={<TurnResultsPage />} />
+                <Route path="results" element={<FinalRankingPage />} />
+                <Route path="*" element={<Navigate to="/lobby" replace />} />
+              </Routes>
+            </GameStateProvider>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
+  );
+}
+
+export default App;

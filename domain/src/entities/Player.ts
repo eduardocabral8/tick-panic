@@ -6,7 +6,7 @@ export class Player {
   readonly role: PlayerRole;
   readonly joinedAt: Date;
 
-  constructor(name: string, role: PlayerRole) {
+  constructor(name: string, role: PlayerRole, now: Date) {
     const trimmed = name.trim();
     if (trimmed.length === 0) {
       throw new Error('Player name is required');
@@ -21,6 +21,6 @@ export class Player {
     this.id = crypto.randomUUID();
     this.name = trimmed;
     this.role = role;
-    this.joinedAt = new Date();
+    this.joinedAt = now;
   }
 }
