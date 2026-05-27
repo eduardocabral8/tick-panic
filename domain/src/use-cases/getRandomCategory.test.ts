@@ -4,22 +4,34 @@ import { Category } from '../entities/Category.js';
 import { CategoryRepository } from '../repositories/CategoryRepository.js';
 
 describe('getRandomCategory', () => {
-  it('should return a category from the repository', () => {
+  it('should return a category from the repository', async () => {
     const categories = [new Category('a'), new Category('b'), new Category('c')];
-    const categoryRepo: CategoryRepository = { save: vi.fn(), findAll: vi.fn(() => categories), findById: vi.fn() };
-    const result = getRandomCategory(categoryRepo);
+    const categoryRepo: CategoryRepository = {
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue(categories),
+      findById: vi.fn().mockResolvedValue(null)
+    };
+    const result = await getRandomCategory(categoryRepo);
     expect(categories).toContain(result);
   });
 
-  it('should throw if no categories available', () => {
-    const categoryRepo: CategoryRepository = { save: vi.fn(), findAll: vi.fn(() => []), findById: vi.fn() };
-    expect(() => getRandomCategory(categoryRepo)).toThrow('No categories available');
+  it('should throw if no categories available', async () => {
+    const categoryRepo: CategoryRepository = {
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([]),
+      findById: vi.fn().mockResolvedValue(null)
+    };
+    await expect(getRandomCategory(categoryRepo)).rejects.toThrow('No categories available');
   });
 
-  it('should return the only category when repository has one', () => {
+  it('should return the only category when repository has one', async () => {
     const only = new Category('unica');
-    const categoryRepo: CategoryRepository = { save: vi.fn(), findAll: vi.fn(() => [only]), findById: vi.fn() };
-    const result = getRandomCategory(categoryRepo);
+    const categoryRepo: CategoryRepository = {
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([only]),
+      findById: vi.fn().mockResolvedValue(null)
+    };
+    const result = await getRandomCategory(categoryRepo);
     expect(result).toBe(only);
   });
 });

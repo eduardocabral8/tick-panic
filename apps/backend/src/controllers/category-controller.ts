@@ -22,7 +22,7 @@ export function registerCategoryRoutes(app: FastifyInstance, categoryRepo: Categ
       },
     },
   }, async (_request: FastifyRequest, reply: FastifyReply) => {
-    const categories = getAllCategories(categoryRepo);
+    const categories = await getAllCategories(categoryRepo);
     reply.send(categories.map((c) => ({ id: c.id, name: c.name, examples: c.examples })));
   });
 
@@ -65,7 +65,7 @@ export function registerCategoryRoutes(app: FastifyInstance, categoryRepo: Categ
 
   app.post('/categories', postOptions, async (request: FastifyRequest, reply: FastifyReply) => {
     const body = request.body as { name: string; examples?: string[] };
-    const category = addCategory(body.name, body.examples ?? [], categoryRepo);
+    const category = await addCategory(body.name, body.examples ?? [], categoryRepo);
     reply.status(201).send({ id: category.id, name: category.name, examples: category.examples });
   });
 }

@@ -1,8 +1,8 @@
 import { User } from '../entities/User.js';
 
 export interface UserRepository {
-  save(user: User): void;
-  findById(id: string): User | null;
-  findByUsername(username: string): User | null;
-  findAll(): User[];
+  save(user: User): Promise<void>;
+  findById(id: string): Promise<User | null>;
+  findByUsername(username: string): Promise<User | null>;
+  findAll(): Promise<User[]>;
 }

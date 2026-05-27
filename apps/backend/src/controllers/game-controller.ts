@@ -185,7 +185,7 @@ export function registerGameRoutes(
       },
     },
   }, async (request: FastifyRequest<{ Params: { id: string }; Body: { hostPlayerId: string } }>, reply: FastifyReply) => {
-    const game = startGame(request.params.id, request.body.hostPlayerId, gameRepo, categoryRepo);
+    const game = await startGame(request.params.id, request.body.hostPlayerId, gameRepo, categoryRepo);
     for (const round of game.rounds) {
       roundRepo.save(round);
       for (const turn of round.turns) {

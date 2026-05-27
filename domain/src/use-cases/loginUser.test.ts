@@ -8,7 +8,12 @@ import { TokenGeneratorPort } from '../ports/TokenGeneratorPort.js';
 describe('loginUser', () => {
   it('should return a token for valid credentials', async () => {
     const existingUser = { id: '123', username: 'player1', passwordHash: 'hashed', role: 'player' as const, createdAt: new Date() };
-    const userRepo: UserRepository = { save: vi.fn(), findById: vi.fn(), findByUsername: vi.fn().mockReturnValue(existingUser), findAll: vi.fn() };
+    const userRepo: UserRepository = {
+      save: vi.fn().mockResolvedValue(undefined),
+      findById: vi.fn().mockResolvedValue(null),
+      findByUsername: vi.fn().mockResolvedValue(existingUser),
+      findAll: vi.fn().mockResolvedValue([]),
+    };
     const passwordHasher: PasswordHasherPort = { hash: vi.fn(), compare: vi.fn().mockResolvedValue(true) };
     const tokenGenerator: TokenGeneratorPort = { generate: vi.fn().mockResolvedValue('jwt-token-123'), verify: vi.fn() };
     const authService = new AuthService(userRepo, passwordHasher, tokenGenerator);
@@ -20,7 +25,12 @@ describe('loginUser', () => {
   });
 
   it('should throw for invalid username', async () => {
-    const userRepo: UserRepository = { save: vi.fn(), findById: vi.fn(), findByUsername: vi.fn().mockReturnValue(null), findAll: vi.fn() };
+    const userRepo: UserRepository = {
+      save: vi.fn().mockResolvedValue(undefined),
+      findById: vi.fn().mockResolvedValue(null),
+      findByUsername: vi.fn().mockResolvedValue(null),
+      findAll: vi.fn().mockResolvedValue([]),
+    };
     const passwordHasher: PasswordHasherPort = { hash: vi.fn(), compare: vi.fn() };
     const tokenGenerator: TokenGeneratorPort = { generate: vi.fn(), verify: vi.fn() };
     const authService = new AuthService(userRepo, passwordHasher, tokenGenerator);
@@ -30,7 +40,12 @@ describe('loginUser', () => {
 
   it('should throw for invalid password', async () => {
     const existingUser = { id: '123', username: 'player1', passwordHash: 'hashed', role: 'player' as const, createdAt: new Date() };
-    const userRepo: UserRepository = { save: vi.fn(), findById: vi.fn(), findByUsername: vi.fn().mockReturnValue(existingUser), findAll: vi.fn() };
+    const userRepo: UserRepository = {
+      save: vi.fn().mockResolvedValue(undefined),
+      findById: vi.fn().mockResolvedValue(null),
+      findByUsername: vi.fn().mockResolvedValue(existingUser),
+      findAll: vi.fn().mockResolvedValue([]),
+    };
     const passwordHasher: PasswordHasherPort = { hash: vi.fn(), compare: vi.fn().mockResolvedValue(false) };
     const tokenGenerator: TokenGeneratorPort = { generate: vi.fn(), verify: vi.fn() };
     const authService = new AuthService(userRepo, passwordHasher, tokenGenerator);

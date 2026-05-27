@@ -7,30 +7,34 @@ import { GameRepository } from '../repositories/GameRepository.js';
 import { CategoryRepository } from '../repositories/CategoryRepository.js';
 
 describe('startGame', () => {
-  it('should start a waiting game with enough players and categories', () => {
+  it('should start a waiting game with enough players and categories', async () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
-      save: vi.fn(),
-      findAll: vi.fn(() => [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
-      findById: vi.fn(),
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findById: vi.fn().mockResolvedValue(null),
     };
-    const updated = startGame(game.id, host.id, gameRepo, categoryRepo);
+    const updated = await startGame(game.id, host.id, gameRepo, categoryRepo);
     expect(updated.status).toBe('IN_PROGRESS');
     expect(updated.rounds).toHaveLength(5);
     expect(gameRepo.save).toHaveBeenCalledWith(game);
   });
 
-  it('should throw if game not found', () => {
+  it('should throw if game not found', async () => {
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => null), findAll: vi.fn() };
-    const categoryRepo: CategoryRepository = { save: vi.fn(), findAll: vi.fn(() => []), findById: vi.fn() };
-    expect(() => startGame('missing', 'host', gameRepo, categoryRepo)).toThrow('Game not found');
+    const categoryRepo: CategoryRepository = {
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([]),
+      findById: vi.fn().mockResolvedValue(null)
+    };
+    await expect(startGame('missing', 'host', gameRepo, categoryRepo)).rejects.toThrow('Game not found');
   });
 
-  it('should throw if caller is not the host', () => {
+  it('should throw if caller is not the host', async () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     const bob = new Player('Bob', 'player', new Date());
@@ -38,41 +42,41 @@ describe('startGame', () => {
     game.addPlayer(bob);
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
-      save: vi.fn(),
-      findAll: vi.fn(() => [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
-      findById: vi.fn(),
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findById: vi.fn().mockResolvedValue(null),
     };
-    expect(() => startGame(game.id, bob.id, gameRepo, categoryRepo)).toThrow('Only the host can start the game');
+    await expect(startGame(game.id, bob.id, gameRepo, categoryRepo)).rejects.toThrow('Only the host can start the game');
   });
 
-  it('should throw if less than 2 players', () => {
+  it('should throw if less than 2 players', async () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
-      save: vi.fn(),
-      findAll: vi.fn(() => [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
-      findById: vi.fn(),
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findById: vi.fn().mockResolvedValue(null),
     };
-    expect(() => startGame(game.id, host.id, gameRepo, categoryRepo)).toThrow('At least 2 players are required');
+    await expect(startGame(game.id, host.id, gameRepo, categoryRepo)).rejects.toThrow('At least 2 players are required');
   });
 
-  it('should throw if less than 5 categories', () => {
+  it('should throw if less than 5 categories', async () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
-      save: vi.fn(),
-      findAll: vi.fn(() => [new Category('a'), new Category('b'), new Category('c'), new Category('d')]),
-      findById: vi.fn(),
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d')]),
+      findById: vi.fn().mockResolvedValue(null),
     };
-    expect(() => startGame(game.id, host.id, gameRepo, categoryRepo)).toThrow('At least 5 categories are required');
+    await expect(startGame(game.id, host.id, gameRepo, categoryRepo)).rejects.toThrow('At least 5 categories are required');
   });
 
-  it('should throw if game already started', () => {
+  it('should throw if game already started', async () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
@@ -84,10 +88,10 @@ describe('startGame', () => {
     );
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
-      save: vi.fn(),
-      findAll: vi.fn(() => [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
-      findById: vi.fn(),
+      save: vi.fn().mockResolvedValue(undefined),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findById: vi.fn().mockResolvedValue(null),
     };
-    expect(() => startGame(game.id, host.id, gameRepo, categoryRepo)).toThrow('Game has already started');
+    await expect(startGame(game.id, host.id, gameRepo, categoryRepo)).rejects.toThrow('Game has already started');
   });
 });

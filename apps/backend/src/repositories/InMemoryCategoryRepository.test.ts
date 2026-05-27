@@ -9,48 +9,48 @@ describe('InMemoryCategoryRepository', () => {
     repository = new InMemoryCategoryRepository();
   });
 
-  it('saves and finds a category by id', () => {
+  it('saves and finds a category by id', async () => {
     const category = new Category('Animals', ['Dog', 'Cat']);
-    repository.save(category);
+    await repository.save(category);
 
-    const found = repository.findById(category.id);
+    const found = await repository.findById(category.id);
 
     expect(found).toBe(category);
   });
 
-  it('returns null when category is not found by id', () => {
-    const found = repository.findById('non-existent-id');
+  it('returns null when category is not found by id', async () => {
+    const found = await repository.findById('non-existent-id');
 
     expect(found).toBeNull();
   });
 
-  it('returns all saved categories', () => {
+  it('returns all saved categories', async () => {
     const category1 = new Category('Animals', ['Dog']);
     const category2 = new Category('Countries', ['Argentina']);
-    repository.save(category1);
-    repository.save(category2);
+    await repository.save(category1);
+    await repository.save(category2);
 
-    const all = repository.findAll();
+    const all = await repository.findAll();
 
     expect(all).toHaveLength(2);
     expect(all).toContain(category1);
     expect(all).toContain(category2);
   });
 
-  it('returns empty array when no categories are saved', () => {
-    const all = repository.findAll();
+  it('returns empty array when no categories are saved', async () => {
+    const all = await repository.findAll();
 
     expect(all).toEqual([]);
   });
 
-  it('updates an existing category on save', () => {
+  it('updates an existing category on save', async () => {
     const category = new Category('Animals', ['Dog']);
-    repository.save(category);
+    await repository.save(category);
     const updatedCategory = new Category('Plants', ['Rose']);
     Object.defineProperty(updatedCategory, 'id', { value: category.id });
-    repository.save(updatedCategory);
+    await repository.save(updatedCategory);
 
-    const found = repository.findById(category.id);
+    const found = await repository.findById(category.id);
 
     expect(found).toBe(updatedCategory);
     expect(found?.name).toBe('Plants');

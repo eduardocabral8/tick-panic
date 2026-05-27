@@ -55,6 +55,16 @@ export default function LoginPage() {
           {isRegistering ? 'ya tengo cuenta' : 'crear cuenta'}
         </button>
       </form>
+
+      <div className="w-full max-w-xs border-t border-text-tertiary my-section" />
+
+      <button
+        type="button"
+        onClick={() => navigate('/local')}
+        className="w-full max-w-xs bg-transparent border-2 border-accent text-accent font-sans font-medium py-element rounded-button hover:bg-accent hover:text-background transition-colors duration-200 lowercase"
+      >
+        jugar en modo local
+      </button>
     </div>
   );
 }

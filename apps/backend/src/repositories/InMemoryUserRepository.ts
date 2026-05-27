@@ -3,15 +3,15 @@ import { UserRepository, User } from '@15-seconds/domain';
 export class InMemoryUserRepository implements UserRepository {
   private users = new Map<string, User>();
 
-  save(user: User): void {
+  async save(user: User): Promise<void> {
     this.users.set(user.id, user);
   }
 
-  findById(id: string): User | null {
+  async findById(id: string): Promise<User | null> {
     return this.users.get(id) ?? null;
   }
 
-  findByUsername(username: string): User | null {
+  async findByUsername(username: string): Promise<User | null> {
     for (const user of this.users.values()) {
       if (user.username === username) {
         return user;
@@ -20,7 +20,7 @@ export class InMemoryUserRepository implements UserRepository {
     return null;
   }
 
-  findAll(): User[] {
+  async findAll(): Promise<User[]> {
     return Array.from(this.users.values());
   }
 }

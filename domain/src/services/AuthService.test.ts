@@ -16,10 +16,10 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     userRepo = {
-      save: vi.fn(),
-      findById: vi.fn(),
-      findByUsername: vi.fn(),
-      findAll: vi.fn(),
+      save: vi.fn().mockResolvedValue(undefined),
+      findById: vi.fn().mockResolvedValue(null),
+      findByUsername: vi.fn().mockResolvedValue(null),
+      findAll: vi.fn().mockResolvedValue([]),
     };
     passwordHasher = {
       hash: vi.fn().mockResolvedValue('hashed_password'),
@@ -34,7 +34,7 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should register a new user with hashed password', async () => {
-      userRepo.findByUsername = vi.fn().mockReturnValue(null);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(null);
       const user = await service.register('alice', 'plain_password', 'player', new Date());
       expect(passwordHasher.hash).toHaveBeenCalledWith('plain_password');
       expect(userRepo.save).toHaveBeenCalledWith(expect.any(User));
@@ -45,21 +45,21 @@ describe('AuthService', () => {
 
     it('should throw if username already exists', async () => {
       const existing = new User('alice', 'old_hash', 'player', new Date());
-      userRepo.findByUsername = vi.fn().mockReturnValue(existing);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(existing);
       await expect(service.register('alice', 'pw', 'player', new Date())).rejects.toThrow('Username already exists');
       expect(passwordHasher.hash).not.toHaveBeenCalled();
       expect(userRepo.save).not.toHaveBeenCalled();
     });
 
     it('should allow registering admin role', async () => {
-      userRepo.findByUsername = vi.fn().mockReturnValue(null);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(null);
       const user = await service.register('admin1', 'pw', 'admin', new Date());
       expect(user.role).toBe('admin');
     });
 
     it('should trim username before checking duplicates', async () => {
       const existing = new User('alice', 'old_hash', 'player', new Date());
-      userRepo.findByUsername = vi.fn().mockReturnValue(existing);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(existing);
       await expect(service.register('  alice  ', 'pw', 'player', new Date())).rejects.toThrow('Username already exists');
     });
   });
@@ -67,7 +67,7 @@ describe('AuthService', () => {
   describe('login', () => {
     it('should return token for valid credentials', async () => {
       const user = new User('alice', 'hashed_pw', 'player', new Date());
-      userRepo.findByUsername = vi.fn().mockReturnValue(user);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(user);
       passwordHasher.compare = vi.fn().mockResolvedValue(true);
       const token = await service.login('alice', 'correct_password');
       expect(passwordHasher.compare).toHaveBeenCalledWith('correct_password', 'hashed_pw');
@@ -76,7 +76,7 @@ describe('AuthService', () => {
     });
 
     it('should throw if username not found', async () => {
-      userRepo.findByUsername = vi.fn().mockReturnValue(null);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(null);
       await expect(service.login('unknown', 'pw')).rejects.toThrow('Invalid credentials');
       expect(passwordHasher.compare).not.toHaveBeenCalled();
       expect(tokenGenerator.generate).not.toHaveBeenCalled();
@@ -84,7 +84,7 @@ describe('AuthService', () => {
 
     it('should throw if password does not match', async () => {
       const user = new User('alice', 'hashed_pw', 'player', new Date());
-      userRepo.findByUsername = vi.fn().mockReturnValue(user);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(user);
       passwordHasher.compare = vi.fn().mockResolvedValue(false);
       await expect(service.login('alice', 'wrong_password')).rejects.toThrow('Invalid credentials');
       expect(tokenGenerator.generate).not.toHaveBeenCalled();
@@ -92,7 +92,7 @@ describe('AuthService', () => {
 
     it('should trim username before lookup', async () => {
       const user = new User('alice', 'hashed_pw', 'player', new Date());
-      userRepo.findByUsername = vi.fn().mockReturnValue(user);
+      userRepo.findByUsername = vi.fn().mockResolvedValue(user);
       passwordHasher.compare = vi.fn().mockResolvedValue(true);
       await service.login('  alice  ', 'correct_password');
       expect(userRepo.findByUsername).toHaveBeenCalledWith('alice');

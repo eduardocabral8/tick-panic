@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { GameStateProvider } from './hooks/GameStateContext.js';
 import LoginPage from './pages/LoginPage.js';
 import LobbyPage from './pages/LobbyPage.js';
+import LocalGamePage from './pages/LocalGamePage.js';
 import WaitingRoomPage from './pages/WaitingRoomPage.js';
 import GamePage from './pages/GamePage.js';
 import TurnResultsPage from './pages/TurnResultsPage.js';
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/lobby" element={<LobbyPage />} />
+        <Route path="/local" element={<LocalGamePage />} />
         <Route
           path="/game/:id/*"
           element={

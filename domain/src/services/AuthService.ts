@@ -13,18 +13,18 @@ export class AuthService {
 
   async register(username: string, password: string, role: 'admin' | 'player', now: Date): Promise<User> {
     const trimmed = username.trim();
-    const existing = this.userRepo.findByUsername(trimmed);
+    const existing = await this.userRepo.findByUsername(trimmed);
     if (existing) {
       throw new Error('Username already exists');
     }
     const passwordHash = await this.passwordHasher.hash(password);
     const user = new User(trimmed, passwordHash, role, now);
-    this.userRepo.save(user);
+    await this.userRepo.save(user);
     return user;
   }
 
   async login(username: string, password: string): Promise<string> {
-    const user = this.userRepo.findByUsername(username.trim());
+    const user = await this.userRepo.findByUsername(username.trim());
     if (!user) {
       throw new Error('Invalid credentials');
     }

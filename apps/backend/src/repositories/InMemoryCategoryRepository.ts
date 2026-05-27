@@ -3,15 +3,15 @@ import { CategoryRepository, Category } from '@15-seconds/domain';
 export class InMemoryCategoryRepository implements CategoryRepository {
   private categories = new Map<string, Category>();
 
-  save(category: Category): void {
+  async save(category: Category): Promise<void> {
     this.categories.set(category.id, category);
   }
 
-  findAll(): Category[] {
+  async findAll(): Promise<Category[]> {
     return Array.from(this.categories.values());
   }
 
-  findById(id: string): Category | null {
+  async findById(id: string): Promise<Category | null> {
     return this.categories.get(id) ?? null;
   }
 }
