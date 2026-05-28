@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useGameContext } from '../hooks/GameStateContext.js';
 import { useGameSocket } from '../hooks/useGameSocket.js';
 import { useTurn } from '../hooks/useTurn.js';
-import AnswerList from '../components/AnswerList.js';
 import PlayerRow from '../components/PlayerRow.js';
+import ConnectionBanner from '../components/ConnectionBanner.js';
 
 export default function TurnResultsPage() {
   const { id } = useParams<{ id: string }>();
@@ -13,7 +13,7 @@ export default function TurnResultsPage() {
   const { nextTurn, startTurn, validateAnswer } = useTurn();
   const [error, setError] = useState('');
 
-  useGameSocket(id ?? null);
+  const { connected } = useGameSocket(id ?? null);
 
   useEffect(() => {
     if (state.currentTurn !== null && id) {
@@ -55,6 +55,7 @@ export default function TurnResultsPage() {
 
   return (
     <div className="flex flex-col items-center space-y-section">
+      <ConnectionBanner connected={connected} />
       <h1 className="font-sans text-lg text-text-secondary">resultados del turno</h1>
 
       <div className="w-full max-w-xs space-y-element">
@@ -87,10 +88,6 @@ export default function TurnResultsPage() {
         ))}
       </div>
 
-      <div className="w-full max-w-xs">
-        <AnswerList answers={state.answers} />
-      </div>
-
       <div className="w-full max-w-xs space-y-element">
         {state.players.map((player) => (
           <PlayerRow
@@ -103,13 +100,19 @@ export default function TurnResultsPage() {
         ))}
       </div>
 
-      {isHost && allValidated && (
-        <button onClick={handleNext} className="btn-primary w-full max-w-xs">
-          siguiente turno
-        </button>
+      {allValidated && (
+        isHost ? (
+          <button onClick={handleNext} className="btn-primary w-full max-w-xs">
+            siguiente turno
+          </button>
+        ) : (
+          <p className="font-sans text-xs text-text-secondary lowercase">
+            esperando al host para continuar
+          </p>
+        )
       )}
 
-      {error && <div className="text-error text-sm">{error}</div>}
+      {error && <div role="alert" aria-live="polite" className="text-error text-sm">{error}</div>}
     </div>
   );
 }

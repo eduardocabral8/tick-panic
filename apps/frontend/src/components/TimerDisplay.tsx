@@ -34,6 +34,12 @@ export default function TimerDisplay({
     }
   }, [isActive, safeRemaining, onExpired]);
 
+  const liveAnnouncement = isExpired
+    ? 'tiempo terminado'
+    : isCritical
+      ? `${safeRemaining} segundos`
+      : '';
+
   return (
     <div className="flex flex-col items-center space-y-element">
       {roundNumber !== undefined && (
@@ -41,9 +47,16 @@ export default function TimerDisplay({
           ronda {roundNumber} de {totalRounds}
         </div>
       )}
-      <div className={`font-mono text-[80px] font-bold leading-none tabular-nums tracking-[-0.04em] ${colorClass}`}>
+      <div
+        role="timer"
+        aria-label="tiempo restante"
+        className={`font-mono font-bold leading-none tabular-nums tracking-[-0.04em] text-[80px] md:text-[140px] lg:text-[180px] ${colorClass}`}
+      >
         {remainingSeconds !== null ? safeRemaining : '-'}
       </div>
+      <span className="sr-only" aria-live="assertive">
+        {liveAnnouncement}
+      </span>
     </div>
   );
 }

@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../hooks/useGame.js';
+import { useAuth } from '../hooks/useAuth.js';
 
 export default function LobbyPage() {
-  const [hostName, setHostName] = useState('');
+  const { currentUser } = useAuth();
+  const initialName = currentUser?.username ?? '';
+  const [hostName, setHostName] = useState(initialName);
   const [gameCode, setGameCode] = useState('');
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(initialName);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { createGame, joinGame, loading } = useGame();
@@ -41,6 +44,7 @@ export default function LobbyPage() {
           value={hostName}
           onChange={(e) => setHostName(e.target.value)}
           placeholder="tu nombre"
+          aria-label="tu nombre"
           className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
         />
         <button
@@ -61,6 +65,7 @@ export default function LobbyPage() {
           value={gameCode}
           onChange={(e) => setGameCode(e.target.value)}
           placeholder="código del juego"
+          aria-label="código del juego"
           className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
         />
         <input
@@ -68,6 +73,7 @@ export default function LobbyPage() {
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
           placeholder="tu nombre"
+          aria-label="tu nombre"
           className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
         />
         <button
@@ -79,7 +85,7 @@ export default function LobbyPage() {
         </button>
       </form>
 
-      {error && <div className="text-error text-sm">{error}</div>}
+      {error && <div role="alert" aria-live="polite" className="text-error text-sm">{error}</div>}
     </div>
   );
 }

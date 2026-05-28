@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PlayerRow from '../components/PlayerRow.js';
 import RoundIndicator from '../components/RoundIndicator.js';
 import TimerDisplay from '../components/TimerDisplay.js';
 import CategoryDisplay from '../components/CategoryDisplay.js';
+import RankingList, { type RankingEntry } from '../components/RankingList.js';
 import { getCategories } from '../services/api.js';
 
 type ScreenState =
@@ -176,8 +176,10 @@ export default function LocalGamePage() {
     setScreen('SETUP');
   };
 
-  const winnerKey = scores.p1 > scores.p2 ? 'p1' : scores.p2 > scores.p1 ? 'p2' : null;
-  const isDraw = scores.p1 === scores.p2;
+  const rankingEntries: RankingEntry[] = [
+    { id: 'p1', name: getPlayerName('p1'), score: scores.p1 },
+    { id: 'p2', name: getPlayerName('p2'), score: scores.p2 },
+  ];
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-md mx-auto">
@@ -196,6 +198,7 @@ export default function LocalGamePage() {
                 value={p1Name}
                 onChange={(e) => setP1Name(e.target.value)}
                 placeholder="jugador 1"
+                aria-label="nombre jugador 1"
                 className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
               />
             </div>
@@ -207,17 +210,20 @@ export default function LocalGamePage() {
                 value={p2Name}
                 onChange={(e) => setP2Name(e.target.value)}
                 placeholder="jugador 2"
+                aria-label="nombre jugador 2"
                 className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
               />
             </div>
 
             <div className="space-y-element">
               <label className="font-sans text-xs text-text-secondary lowercase">quién empieza (eligiendo categoría)</label>
-              <div className="grid grid-cols-3 gap-element">
+              <div role="radiogroup" aria-label="quién empieza" className="grid grid-cols-3 gap-element">
                 <button
                   type="button"
+                  role="radio"
+                  aria-checked={startingChoice === 'p1'}
                   onClick={() => setStartingChoice('p1')}
-                  className={`py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
+                  className={`min-h-[44px] py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
                     startingChoice === 'p1' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
@@ -225,8 +231,10 @@ export default function LocalGamePage() {
                 </button>
                 <button
                   type="button"
+                  role="radio"
+                  aria-checked={startingChoice === 'p2'}
                   onClick={() => setStartingChoice('p2')}
-                  className={`py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
+                  className={`min-h-[44px] py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
                     startingChoice === 'p2' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
@@ -234,8 +242,10 @@ export default function LocalGamePage() {
                 </button>
                 <button
                   type="button"
+                  role="radio"
+                  aria-checked={startingChoice === 'random'}
                   onClick={() => setStartingChoice('random')}
-                  className={`py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
+                  className={`min-h-[44px] py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
                     startingChoice === 'random' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
@@ -281,6 +291,7 @@ export default function LocalGamePage() {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder="escribí una categoría aquí..."
+                aria-label="categoría"
                 className="flex-1 border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
               />
               <button
@@ -293,9 +304,9 @@ export default function LocalGamePage() {
             </div>
 
             {category.trim() && (
-              <div className="border border-text-tertiary p-section rounded-container">
-                <span className="font-sans text-xs text-text-secondary lowercase">categoría a adivinar:</span>
-                <div className="font-mono text-2xl font-bold text-accent mt-element">{category.trim()}</div>
+              <div className="space-y-element">
+                <span className="font-sans text-xs text-text-secondary lowercase">categoría a adivinar</span>
+                <div className="font-mono text-3xl font-bold text-accent">{category.trim()}</div>
               </div>
             )}
 
@@ -314,16 +325,12 @@ export default function LocalGamePage() {
         <div className="w-full space-y-section flex flex-col items-center text-center">
           <RoundIndicator currentRound={round} />
 
-          <div className="space-y-section flex flex-col items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-16 h-16 text-accent">
-              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-              <line x1="12" y1="18" x2="12.01" y2="18"></line>
-            </svg>
-            <h2 className="font-sans text-xl font-bold text-text-primary lowercase">
+          <div className="space-y-element flex flex-col items-center pt-section">
+            <h2 className="font-mono text-3xl font-bold text-text-primary lowercase">
               pasale el dispositivo a {guesserName}
             </h2>
             <p className="font-sans text-sm text-text-secondary lowercase">
-              la categoría está oculta. ¡no la espíes!
+              la categoría está oculta. no la espíes.
             </p>
           </div>
 
@@ -331,7 +338,7 @@ export default function LocalGamePage() {
             onClick={handleStartTurn}
             className="btn-primary w-full"
           >
-            ¡ya tengo el dispositivo! comenzar
+            ya tengo el dispositivo, comenzar
           </button>
         </div>
       )}
@@ -347,19 +354,17 @@ export default function LocalGamePage() {
             roundNumber={round}
           />
 
-          <CategoryDisplay categoryName={category} roundNumber={round} />
+          <CategoryDisplay categoryName={category} />
 
-          <div className="py-section">
-            <p className="font-sans text-sm text-text-secondary lowercase">
-              ¡di una respuesta válida en voz alta antes que termine el tiempo!
-            </p>
-          </div>
+          <p className="font-sans text-sm text-text-secondary lowercase max-w-[28ch]">
+            decí una respuesta válida en voz alta antes que termine el tiempo
+          </p>
 
           <button
             onClick={handleAnswerSaid}
             className="btn-primary w-full"
           >
-            ¡ya la dije!
+            ya la dije
           </button>
         </div>
       )}
@@ -368,17 +373,12 @@ export default function LocalGamePage() {
         <div className="w-full space-y-section flex flex-col items-center text-center">
           <RoundIndicator currentRound={round} />
 
-          <div className="space-y-section flex flex-col items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-16 h-16 text-accent">
-              <line x1="10" y1="2" x2="14" y2="2"></line>
-              <line x1="12" y1="14" x2="12" y2="8"></line>
-              <circle cx="12" cy="14" r="8"></circle>
-            </svg>
-            <h2 className="font-sans text-xl font-bold text-text-primary lowercase">
-              ¡tiempo terminado!
+          <div className="space-y-element flex flex-col items-center pt-section">
+            <h2 className="font-mono text-3xl font-bold text-error lowercase">
+              tiempo terminado
             </h2>
-            <p className="font-sans text-sm text-text-secondary lowercase">
-              pasale el dispositivo de vuelta a {chooserName} para validar tu respuesta.
+            <p className="font-sans text-sm text-text-secondary lowercase max-w-[28ch]">
+              pasale el dispositivo de vuelta a {chooserName} para validar la respuesta
             </p>
           </div>
 
@@ -395,64 +395,43 @@ export default function LocalGamePage() {
         <div className="w-full space-y-section flex flex-col items-center text-center">
           <RoundIndicator currentRound={round} />
 
-          <div className="py-section border border-text-tertiary p-section rounded-container space-y-element">
-            <span className="font-sans text-xs text-text-secondary lowercase">categoría:</span>
-            <div className="font-mono text-2xl font-bold text-text-primary">{category}</div>
-            <div className="pt-element">
-              <span className="font-sans text-sm text-text-secondary lowercase">
-                ¿dijo <span className="text-accent font-bold">{guesserName}</span> una respuesta válida en voz alta?
-              </span>
-            </div>
+          <div className="space-y-element pt-section">
+            <span className="font-sans text-xs text-text-secondary lowercase">categoría</span>
+            <div className="font-mono text-3xl font-bold text-text-primary">{category}</div>
           </div>
 
-          <div className="grid grid-cols-2 gap-element pt-section">
+          <p className="font-sans text-sm text-text-secondary lowercase max-w-[32ch]">
+            ¿dijo <span className="text-accent font-medium">{guesserName}</span> una respuesta válida en voz alta?
+          </p>
+
+          <div className="grid grid-cols-2 gap-element w-full">
             <button onClick={() => handleValidation(true)} className="btn-primary">
-              sí, fue válida (+1 pt)
+              sí, fue válida
             </button>
             <button onClick={() => handleValidation(false)} className="btn-danger">
-              no, fue inválida (0 pts)
+              no, fue inválida
             </button>
           </div>
         </div>
       )}
 
       {screen === 'RESULTS' && (
-        <div className="w-full space-y-section text-center">
-          <h1 className="font-mono text-4xl font-bold text-text-primary">ranking final</h1>
+        <div className="w-full flex flex-col items-center space-y-section">
+          <h1 className="font-mono text-3xl font-bold text-text-primary lowercase">
+            ranking final
+          </h1>
 
-          {isDraw ? (
-            <div className="text-accent font-sans text-lg lowercase">¡empate!</div>
-          ) : (
-            <div className="text-accent font-sans text-lg lowercase">
-              ganador: {getPlayerName(winnerKey!)}
-            </div>
-          )}
-
-          <div className="w-full space-y-element pt-section">
-            <PlayerRow
-              name={getPlayerName('p1')}
-              score={scores.p1}
-              isHost={false}
-              isCurrentTurn={false}
-            />
-            <PlayerRow
-              name={getPlayerName('p2')}
-              score={scores.p2}
-              isHost={false}
-              isCurrentTurn={false}
-            />
+          <div className="w-full max-w-sm">
+            <RankingList entries={rankingEntries} />
           </div>
 
-          <div className="w-full space-y-section pt-section">
-            <button
-              onClick={handlePlayAgain}
-              className="btn-primary w-full"
-            >
+          <div className="w-full max-w-sm space-y-element pt-section">
+            <button onClick={handlePlayAgain} className="btn-primary w-full">
               jugar de nuevo
             </button>
             <button
               onClick={() => navigate('/')}
-              className="btn-ghost w-full lowercase"
+              className="btn-outline w-full"
             >
               volver al menú principal
             </button>

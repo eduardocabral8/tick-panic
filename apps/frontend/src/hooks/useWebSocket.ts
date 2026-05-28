@@ -1,8 +1,9 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { getSocket, joinRoom } from '../services/ws.js';
 
 export function useWebSocket(gameId: string | null, onReconnect?: () => void) {
   const socketRef = useRef(getSocket());
+  const [connected, setConnected] = useState<boolean>(socketRef.current.connected);
 
   useEffect(() => {
     if (gameId) {
@@ -10,6 +11,7 @@ export function useWebSocket(gameId: string | null, onReconnect?: () => void) {
     }
 
     const handleConnect = () => {
+      setConnected(true);
       if (gameId) {
         joinRoom(gameId);
       }
@@ -18,10 +20,16 @@ export function useWebSocket(gameId: string | null, onReconnect?: () => void) {
       }
     };
 
+    const handleDisconnect = () => {
+      setConnected(false);
+    };
+
     socketRef.current.on('connect', handleConnect);
+    socketRef.current.on('disconnect', handleDisconnect);
 
     return () => {
       socketRef.current.off('connect', handleConnect);
+      socketRef.current.off('disconnect', handleDisconnect);
     };
   }, [gameId, onReconnect]);
 
@@ -33,5 +41,5 @@ export function useWebSocket(gameId: string | null, onReconnect?: () => void) {
     socketRef.current.off(event, callback);
   }, []);
 
-  return { on, off };
+  return { on, off, connected };
 }

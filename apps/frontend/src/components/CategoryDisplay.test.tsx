@@ -4,17 +4,12 @@ import CategoryDisplay from './CategoryDisplay.js';
 
 describe('CategoryDisplay', () => {
   it('renders category name in lowercase', () => {
-    render(<CategoryDisplay categoryName="Animales" roundNumber={1} />);
+    render(<CategoryDisplay categoryName="Animales" />);
     expect(screen.getByText('animales')).toBeDefined();
   });
 
-  it('renders round number', () => {
-    render(<CategoryDisplay categoryName="Animales" roundNumber={3} />);
-    expect(screen.getByText('ronda 3')).toBeDefined();
-  });
-
   it('does not render examples section', () => {
-    const { container } = render(<CategoryDisplay categoryName="Animales" roundNumber={1} />);
+    const { container } = render(<CategoryDisplay categoryName="Animales" />);
     expect(container.querySelector('.font-mono')).toBeNull();
   });
 });

@@ -9,23 +9,20 @@ const meta: Meta<typeof CategoryDisplay> = {
 export default meta;
 type Story = StoryObj<typeof CategoryDisplay>;
 
-export const Round1: Story = {
+export const Animales: Story = {
   args: {
     categoryName: 'Animales',
-    roundNumber: 1,
   },
 };
 
-export const Round3: Story = {
+export const Paises: Story = {
   args: {
     categoryName: 'Países',
-    roundNumber: 3,
   },
 };
 
-export const Round5: Story = {
+export const Profesiones: Story = {
   args: {
     categoryName: 'Profesiones',
-    roundNumber: 5,
   },
 };

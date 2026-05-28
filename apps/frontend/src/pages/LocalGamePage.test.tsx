@@ -89,17 +89,17 @@ describe('LocalGamePage', () => {
 
     // 2. PASS_TO_GUESS
     expect(screen.getByText('pasale el dispositivo a Mateo')).toBeDefined();
-    fireEvent.click(screen.getByText('¡ya tengo el dispositivo! comenzar'));
+    fireEvent.click(screen.getByText('ya tengo el dispositivo, comenzar'));
 
     // 3. PLAYING
     expect(screen.getByText(/colores/i)).toBeDefined();
-    expect(screen.getByText('¡ya la dije!')).toBeDefined();
-    
+    expect(screen.getByText('ya la dije')).toBeDefined();
+
     // Pulsar "ya la dije"
-    fireEvent.click(screen.getByText('¡ya la dije!'));
+    fireEvent.click(screen.getByText('ya la dije'));
 
     // 4. PASS_TO_VALIDATE
-    expect(screen.getByText('¡tiempo terminado!')).toBeDefined();
+    expect(screen.getByText('tiempo terminado')).toBeDefined();
     expect(screen.getByText('soy Sofia, validar')).toBeDefined();
     fireEvent.click(screen.getByText('soy Sofia, validar'));
 
@@ -107,13 +107,13 @@ describe('LocalGamePage', () => {
     expect(
       screen.getByText(
         (_, element) =>
-          element?.tagName === 'SPAN' &&
+          element?.tagName === 'P' &&
           (element?.textContent?.includes('¿dijo Mateo una respuesta válida') ?? false),
       ),
     ).toBeDefined();
     
-    // Marcar como válida (+1 pt)
-    fireEvent.click(screen.getByText('sí, fue válida (+1 pt)'));
+    // Marcar como válida
+    fireEvent.click(screen.getByText('sí, fue válida'));
 
     // 6. Debe pasar al turno de Mateo
     expect(screen.getByText('asignale una categoría a Sofia')).toBeDefined();
@@ -139,7 +139,7 @@ describe('LocalGamePage', () => {
       target: { value: 'Paises' },
     });
     fireEvent.click(screen.getByText('guardar y pasar dispositivo'));
-    fireEvent.click(screen.getByText('¡ya tengo el dispositivo! comenzar'));
+    fireEvent.click(screen.getByText('ya tengo el dispositivo, comenzar'));
 
     // En ronda 1 el time limit es 5 segundos
     expect(screen.getByText('5', { selector: '.font-mono' })).toBeDefined();
@@ -150,7 +150,7 @@ describe('LocalGamePage', () => {
     });
 
     // Debe saltar automáticamente a la pantalla de transición de validación
-    expect(screen.getByText('¡tiempo terminado!')).toBeDefined();
+    expect(screen.getByText('tiempo terminado')).toBeDefined();
 
     vi.useRealTimers();
   });

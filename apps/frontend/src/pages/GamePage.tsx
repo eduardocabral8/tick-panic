@@ -10,6 +10,7 @@ import AnswerInput from '../components/AnswerInput.js';
 import AnswerList from '../components/AnswerList.js';
 import PlayerRow from '../components/PlayerRow.js';
 import RoundIndicator from '../components/RoundIndicator.js';
+import ConnectionBanner from '../components/ConnectionBanner.js';
 
 export default function GamePage() {
   const { id } = useParams<{ id: string }>();
@@ -23,7 +24,7 @@ export default function GamePage() {
   const answerLimit = state.currentTurn?.timeLimit ?? 1;
   const hasSubmitted = state.answers.length >= answerLimit;
 
-  useGameSocket(id ?? null);
+  const { connected } = useGameSocket(id ?? null);
 
   const { remainingSeconds } = useTimer(
     state.currentTurn?.timeLimit ?? 0,
@@ -60,6 +61,7 @@ export default function GamePage() {
 
   return (
     <div className="flex flex-col items-center space-y-section">
+      <ConnectionBanner connected={connected} />
       <RoundIndicator currentRound={state.currentRound} totalRounds={3} />
 
       <TimerDisplay
@@ -71,14 +73,20 @@ export default function GamePage() {
       />
 
       {state.category && (
-        <CategoryDisplay categoryName={state.category.name} roundNumber={state.currentRound} />
+        <CategoryDisplay categoryName={state.category.name} />
       )}
 
       <div className="w-full max-w-xs space-y-element">
-        {!isMyTurn && turnActive && (
-          <div className="font-sans text-sm text-text-secondary lowercase">
-            turno de {state.players.find((p) => p.id === state.currentTurn?.playerId)?.name ?? ''}
-          </div>
+        {turnActive && (
+          isMyTurn ? (
+            <div className="font-sans text-sm font-medium text-accent lowercase tracking-wide">
+              {hasSubmitted ? 'tu turno · enviado' : 'tu turno'}
+            </div>
+          ) : (
+            <div className="font-sans text-sm text-text-secondary lowercase">
+              turno de {state.players.find((p) => p.id === state.currentTurn?.playerId)?.name ?? ''}
+            </div>
+          )
         )}
         <AnswerInput
           key={state.currentTurn?.id || 'no-turn'}
@@ -86,7 +94,7 @@ export default function GamePage() {
           disabled={!isMyTurn || !turnActive || hasSubmitted}
           timerExpired={timerExpired}
         />
-        {submitError && <div className="text-error text-sm">{submitError}</div>}
+        {submitError && <div role="alert" aria-live="polite" className="text-error text-sm">{submitError}</div>}
       </div>
 
       <div className="w-full max-w-xs">

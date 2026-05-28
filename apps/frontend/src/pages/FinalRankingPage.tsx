@@ -2,8 +2,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useGameContext } from '../hooks/GameStateContext.js';
 import { useGameSocket } from '../hooks/useGameSocket.js';
 import { useGame } from '../hooks/useGame.js';
-import PlayerRow from '../components/PlayerRow.js';
 import BackToLobbyButton from '../components/BackToLobbyButton.js';
+import ConnectionBanner from '../components/ConnectionBanner.js';
+import RankingList, { type RankingEntry } from '../components/RankingList.js';
 
 export default function FinalRankingPage() {
   const { id } = useParams<{ id: string }>();
@@ -15,13 +16,19 @@ export default function FinalRankingPage() {
     navigate(`/game/${newGameId}/waiting`);
   };
 
-  useGameSocket(id ?? null, {
+  const { connected } = useGameSocket(id ?? null, {
     onGameRestarted: handleGameRestarted,
   });
 
-  const sortedPlayers = [...state.players].sort((a, b) => b.score - a.score);
   const currentPlayerId = localStorage.getItem('currentPlayerId');
   const isHost = state.players.some((p) => p.id === currentPlayerId && p.role === 'host');
+
+  const entries: RankingEntry[] = state.players.map((p) => ({
+    id: p.id,
+    name: p.name,
+    score: p.score,
+    isHost: p.role === 'host',
+  }));
 
   const handlePlayAgain = async () => {
     if (!id || !isHost) return;
@@ -34,41 +41,36 @@ export default function FinalRankingPage() {
 
   return (
     <div className="flex flex-col items-center space-y-section">
-      <h1 className="font-mono text-2xl font-bold text-text-primary">ranking final</h1>
+      <ConnectionBanner connected={connected} />
+      <h1 className="font-mono text-3xl font-bold text-text-primary lowercase">
+        ranking final
+      </h1>
 
-      {state.winner && (
-        <div className="text-accent font-sans text-lg">
-          ganador: {state.winner.name}
-        </div>
-      )}
-
-      <div className="w-full max-w-xs space-y-element">
-        {sortedPlayers.map((player, index) => (
-          <div key={player.id} className="flex items-center justify-between w-full">
-            <span className="font-mono text-sm text-text-secondary mr-element tabular-nums">{index + 1}</span>
-            <div className="flex-1">
-              <PlayerRow
-                name={player.name}
-                score={player.score}
-                isHost={player.role === 'host'}
-                isCurrentTurn={false}
-              />
-            </div>
-          </div>
-        ))}
+      <div className="w-full max-w-sm">
+        <RankingList entries={entries} />
       </div>
 
-      <div className="w-full max-w-xs space-y-element pt-section">
-        <button
-          onClick={handlePlayAgain}
-          disabled={loading || !isHost}
-          className="btn-primary w-full"
-        >
-          {isHost ? 'jugar de nuevo' : 'jugar de nuevo (esperando al host)'}
-        </button>
+      <div className="w-full max-w-sm space-y-element pt-section">
+        {isHost ? (
+          <button
+            onClick={handlePlayAgain}
+            disabled={loading}
+            className="btn-primary w-full"
+          >
+            jugar de nuevo
+          </button>
+        ) : (
+          <>
+            <button disabled className="btn-primary w-full">
+              jugar de nuevo
+            </button>
+            <p className="font-sans text-xs text-text-secondary lowercase text-center">
+              esperando al host
+            </p>
+          </>
+        )}
         <BackToLobbyButton />
       </div>
     </div>
   );
 }
-

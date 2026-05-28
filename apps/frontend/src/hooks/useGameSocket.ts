@@ -16,7 +16,7 @@ export interface GameSocketCallbacks {
 
 export function useGameSocket(gameId: string | null, callbacks?: GameSocketCallbacks) {
   const { state, dispatch } = useGameContext();
-  const { on, off } = useWebSocket(gameId);
+  const { on, off, connected } = useWebSocket(gameId);
   const callbacksRef = useRef(callbacks);
   callbacksRef.current = callbacks;
   const playersRef = useRef(state.players);
@@ -178,4 +178,6 @@ export function useGameSocket(gameId: string | null, callbacks?: GameSocketCallb
       off('connect', handleConnect);
     };
   }, [gameId, on, off, dispatch]);
+
+  return { connected };
 }

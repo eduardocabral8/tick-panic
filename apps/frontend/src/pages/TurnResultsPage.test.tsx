@@ -34,7 +34,7 @@ vi.mock('../hooks/GameStateContext.js', () => ({
 }));
 
 vi.mock('../hooks/useGameSocket.js', () => ({
-  useGameSocket: vi.fn(),
+  useGameSocket: vi.fn(() => ({ connected: true })),
 }));
 
 function setupPlayers(players: GameState['players'], playerId: string) {

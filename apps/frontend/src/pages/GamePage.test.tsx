@@ -5,7 +5,7 @@ import type { GameState } from '../hooks/GameStateContext.js';
 import GamePage from './GamePage.js';
 
 vi.mock('../hooks/useGameSocket.js', () => ({
-  useGameSocket: vi.fn(),
+  useGameSocket: vi.fn(() => ({ connected: true })),
 }));
 
 vi.mock('../hooks/useTimer.js', () => ({

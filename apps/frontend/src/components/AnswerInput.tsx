@@ -58,6 +58,7 @@ export default function AnswerInput({
         onChange={(e) => setValue(e.target.value)}
         disabled={isBlocked}
         placeholder={placeholder}
+        aria-label="respuesta"
         className={`flex-1 border-b-2 bg-transparent py-element text-2xl text-text-primary placeholder:text-text-secondary focus:outline-none disabled:opacity-30 transition-colors duration-300 ${
           flashing ? 'border-accent' : 'border-text-primary focus:border-accent'
         }`}

@@ -15,14 +15,16 @@ export default function GameCode({ code }: GameCodeProps) {
 
   return (
     <div className="text-center">
-      <div
+      <button
+        type="button"
         onClick={handleClick}
-        className={`font-mono text-4xl tracking-widest cursor-pointer transition-colors duration-200 ${
+        aria-label={`copiar código del juego ${code}`}
+        className={`font-mono text-4xl tracking-widest cursor-pointer transition-colors duration-200 bg-transparent focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 ${
           copied ? 'text-accent' : 'text-text-primary'
         }`}
       >
-        {copied ? 'copiado' : code}
-      </div>
+        <span aria-live="polite">{copied ? 'copiado' : code}</span>
+      </button>
     </div>
   );
 }

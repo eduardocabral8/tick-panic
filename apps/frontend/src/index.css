@@ -77,7 +77,8 @@
   }
 
   .btn-ghost {
-    @apply text-text-secondary font-sans text-sm;
+    @apply text-text-secondary font-sans text-sm py-3 px-element;
+    min-height: 44px;
     transition: color 150ms var(--ease-out), opacity 150ms var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) {

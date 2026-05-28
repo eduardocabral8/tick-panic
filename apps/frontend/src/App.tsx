@@ -10,7 +10,15 @@ import FinalRankingPage from './pages/FinalRankingPage.js';
 
 function App() {
   return (
-    <div className="min-h-screen bg-background px-page py-section">
+    <main
+      className="min-h-screen bg-background px-page py-section"
+      style={{
+        paddingTop: 'max(24px, env(safe-area-inset-top))',
+        paddingBottom: 'max(24px, env(safe-area-inset-bottom))',
+        paddingLeft: 'max(16px, env(safe-area-inset-left))',
+        paddingRight: 'max(16px, env(safe-area-inset-right))',
+      }}
+    >
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/lobby" element={<LobbyPage />} />
@@ -31,7 +39,7 @@ function App() {
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </div>
+    </main>
   );
 }
 
