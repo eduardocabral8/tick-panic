@@ -41,16 +41,13 @@ export default function LoginPage() {
           className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
         />
         {error && <div className="text-error text-sm">{error}</div>}
-        <button
-          type="submit"
-          className="w-full bg-accent text-background font-sans font-medium py-element rounded-button"
-        >
+        <button type="submit" className="btn-primary w-full">
           {isRegistering ? 'registrarse' : 'entrar'}
         </button>
         <button
           type="button"
           onClick={() => setIsRegistering(!isRegistering)}
-          className="w-full text-text-secondary text-sm"
+          className="btn-ghost w-full"
         >
           {isRegistering ? 'ya tengo cuenta' : 'crear cuenta'}
         </button>
@@ -61,7 +58,7 @@ export default function LoginPage() {
       <button
         type="button"
         onClick={() => navigate('/local')}
-        className="w-full max-w-xs bg-transparent border-2 border-accent text-accent font-sans font-medium py-element rounded-button hover:bg-accent hover:text-background transition-colors duration-200 lowercase"
+        className="btn-primary w-full max-w-xs lowercase"
       >
         jugar en modo local
       </button>

@@ -217,7 +217,7 @@ export default function LocalGamePage() {
                 <button
                   type="button"
                   onClick={() => setStartingChoice('p1')}
-                  className={`py-element rounded-button border font-sans text-xs lowercase ${
+                  className={`py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
                     startingChoice === 'p1' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
@@ -226,7 +226,7 @@ export default function LocalGamePage() {
                 <button
                   type="button"
                   onClick={() => setStartingChoice('p2')}
-                  className={`py-element rounded-button border font-sans text-xs lowercase ${
+                  className={`py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
                     startingChoice === 'p2' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
@@ -235,7 +235,7 @@ export default function LocalGamePage() {
                 <button
                   type="button"
                   onClick={() => setStartingChoice('random')}
-                  className={`py-element rounded-button border font-sans text-xs lowercase ${
+                  className={`py-element rounded-button border font-sans text-xs lowercase transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
                     startingChoice === 'random' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
@@ -246,14 +246,14 @@ export default function LocalGamePage() {
 
             <button
               onClick={handleStartGame}
-              className="w-full bg-accent text-background font-sans font-medium py-element rounded-button mt-section"
+              className="btn-primary w-full mt-section"
             >
               iniciar juego
             </button>
 
             <button
               onClick={() => navigate('/')}
-              className="w-full text-text-secondary font-sans text-sm lowercase"
+              className="btn-ghost w-full lowercase"
             >
               volver al menú principal
             </button>
@@ -286,7 +286,7 @@ export default function LocalGamePage() {
               <button
                 type="button"
                 onClick={handleRandomCategory}
-                className="bg-text-tertiary text-text-primary font-sans text-xs px-4 py-element rounded-button lowercase"
+                className="btn-outline px-4 text-xs lowercase"
               >
                 aleatoria
               </button>
@@ -302,7 +302,7 @@ export default function LocalGamePage() {
             <button
               disabled={!category.trim()}
               onClick={handleConfirmCategory}
-              className="w-full bg-accent text-background font-sans font-medium py-element rounded-button disabled:opacity-30"
+              className="btn-primary w-full"
             >
               guardar y pasar dispositivo
             </button>
@@ -329,7 +329,7 @@ export default function LocalGamePage() {
 
           <button
             onClick={handleStartTurn}
-            className="w-full bg-accent text-background font-sans font-medium py-element rounded-button"
+            className="btn-primary w-full"
           >
             ¡ya tengo el dispositivo! comenzar
           </button>
@@ -357,7 +357,7 @@ export default function LocalGamePage() {
 
           <button
             onClick={handleAnswerSaid}
-            className="w-full bg-accent text-background font-sans font-medium py-element rounded-button"
+            className="btn-primary w-full"
           >
             ¡ya la dije!
           </button>
@@ -384,7 +384,7 @@ export default function LocalGamePage() {
 
           <button
             onClick={() => setScreen('VALIDATION')}
-            className="w-full bg-accent text-background font-sans font-medium py-element rounded-button"
+            className="btn-primary w-full"
           >
             soy {chooserName}, validar
           </button>
@@ -406,16 +406,10 @@ export default function LocalGamePage() {
           </div>
 
           <div className="grid grid-cols-2 gap-element pt-section">
-            <button
-              onClick={() => handleValidation(true)}
-              className="bg-accent text-background font-sans font-medium py-element rounded-button"
-            >
+            <button onClick={() => handleValidation(true)} className="btn-primary">
               sí, fue válida (+1 pt)
             </button>
-            <button
-              onClick={() => handleValidation(false)}
-              className="bg-error text-text-primary font-sans font-medium py-element rounded-button"
-            >
+            <button onClick={() => handleValidation(false)} className="btn-danger">
               no, fue inválida (0 pts)
             </button>
           </div>
@@ -452,13 +446,13 @@ export default function LocalGamePage() {
           <div className="w-full space-y-section pt-section">
             <button
               onClick={handlePlayAgain}
-              className="w-full bg-accent text-background font-sans font-medium py-element rounded-button"
+              className="btn-primary w-full"
             >
               jugar de nuevo
             </button>
             <button
               onClick={() => navigate('/')}
-              className="w-full text-text-secondary font-sans text-sm lowercase"
+              className="btn-ghost w-full lowercase"
             >
               volver al menú principal
             </button>

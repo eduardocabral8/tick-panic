@@ -65,7 +65,7 @@ export default function AnswerInput({
       <button
         type="submit"
         disabled={isBlocked || !value.trim()}
-        className="bg-accent text-background font-sans font-medium px-4 py-element rounded-button disabled:opacity-30 transition-opacity duration-300"
+        className="btn-primary px-4"
       >
         enviar
       </button>

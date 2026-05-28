@@ -12,7 +12,7 @@ export default function PlayerRow({ name, score, isHost, isCurrentTurn }: Player
         {name}
         {isHost && <span className="text-text-secondary text-xs ml-element">(host)</span>}
       </div>
-      <div className="font-mono text-sm text-text-primary">{score}</div>
+      <div className="font-mono text-sm text-text-primary tabular-nums">{score}</div>
     </div>
   );
 }

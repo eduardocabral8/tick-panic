@@ -41,7 +41,7 @@ export default function TimerDisplay({
           ronda {roundNumber} de {totalRounds}
         </div>
       )}
-      <div className={`font-mono text-[80px] font-bold leading-none ${colorClass}`}>
+      <div className={`font-mono text-[80px] font-bold leading-none tabular-nums tracking-[-0.04em] ${colorClass}`}>
         {remainingSeconds !== null ? safeRemaining : '-'}
       </div>
     </div>

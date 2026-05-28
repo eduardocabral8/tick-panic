@@ -57,7 +57,7 @@ export default function WaitingRoomPage() {
           <button
             onClick={handleStart}
             disabled={state.players.length < 2 || loading}
-            className="w-full bg-accent text-background font-sans font-medium py-element rounded-button disabled:opacity-30"
+            className="btn-primary w-full"
           >
             iniciar juego
           </button>

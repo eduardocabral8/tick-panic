@@ -46,7 +46,7 @@ export default function LobbyPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-accent text-background font-sans font-medium py-element rounded-button disabled:opacity-30"
+          className="btn-primary w-full"
         >
           crear
         </button>
@@ -73,7 +73,7 @@ export default function LobbyPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-accent text-background font-sans font-medium py-element rounded-button disabled:opacity-30"
+          className="btn-primary w-full"
         >
           unirse
         </button>

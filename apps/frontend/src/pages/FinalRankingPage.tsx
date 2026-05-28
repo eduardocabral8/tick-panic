@@ -45,7 +45,7 @@ export default function FinalRankingPage() {
       <div className="w-full max-w-xs space-y-element">
         {sortedPlayers.map((player, index) => (
           <div key={player.id} className="flex items-center justify-between w-full">
-            <span className="font-mono text-sm text-text-secondary mr-element">{index + 1}</span>
+            <span className="font-mono text-sm text-text-secondary mr-element tabular-nums">{index + 1}</span>
             <div className="flex-1">
               <PlayerRow
                 name={player.name}
@@ -62,7 +62,7 @@ export default function FinalRankingPage() {
         <button
           onClick={handlePlayAgain}
           disabled={loading || !isHost}
-          className="w-full bg-accent text-background font-sans font-medium py-element rounded-button disabled:opacity-30"
+          className="btn-primary w-full"
         >
           {isHost ? 'jugar de nuevo' : 'jugar de nuevo (esperando al host)'}
         </button>

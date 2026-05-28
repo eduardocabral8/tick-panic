@@ -12,10 +12,7 @@ export default function BackToLobbyButton({ className = '' }: BackToLobbyButtonP
   };
 
   return (
-    <button
-      onClick={handleBackToLobby}
-      className={`w-full border-2 border-text-primary text-text-primary font-sans font-medium py-element rounded-button hover:border-accent hover:text-accent transition-colors duration-300 ${className}`}
-    >
+    <button onClick={handleBackToLobby} className={`btn-outline w-full ${className}`}>
       volver al lobby
     </button>
   );

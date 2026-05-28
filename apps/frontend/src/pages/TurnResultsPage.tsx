@@ -65,13 +65,13 @@ export default function TurnResultsPage() {
               <div className="flex space-x-element">
                 <button
                   onClick={() => handleValidate(answer.id, true)}
-                  className="flex-1 bg-accent text-background font-sans font-medium py-element rounded-button"
+                  className="btn-primary flex-1"
                 >
                   válido
                 </button>
                 <button
                   onClick={() => handleValidate(answer.id, false)}
-                  className="flex-1 bg-error text-background font-sans font-medium py-element rounded-button"
+                  className="btn-danger flex-1"
                 >
                   inválido
                 </button>
@@ -104,10 +104,7 @@ export default function TurnResultsPage() {
       </div>
 
       {isHost && allValidated && (
-        <button
-          onClick={handleNext}
-          className="w-full max-w-xs bg-accent text-background font-sans font-medium py-element rounded-button"
-        >
+        <button onClick={handleNext} className="btn-primary w-full max-w-xs">
           siguiente turno
         </button>
       )}
