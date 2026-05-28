@@ -184,7 +184,7 @@ export default function LocalGamePage() {
       {screen === 'SETUP' && (
         <div className="w-full space-y-section">
           <div className="text-center">
-            <h1 className="font-mono text-4xl font-bold text-text-primary mb-element">TickPanic</h1>
+            <h1 className="font-mono text-4xl font-bold text-text-primary mb-element">tickpanic</h1>
             <span className="font-sans text-sm text-accent lowercase">modo local</span>
           </div>
 
