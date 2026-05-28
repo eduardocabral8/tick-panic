@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useGameContext } from '../hooks/GameStateContext.js';
 import { useGameSocket } from '../hooks/useGameSocket.js';
 import { useGame } from '../hooks/useGame.js';
+import { useAuth } from '../hooks/useAuth.js';
 import BackToLobbyButton from '../components/BackToLobbyButton.js';
 import ConnectionBanner from '../components/ConnectionBanner.js';
 import RankingList, { type RankingEntry } from '../components/RankingList.js';
@@ -11,6 +12,7 @@ export default function FinalRankingPage() {
   const navigate = useNavigate();
   const { state } = useGameContext();
   const { restartGame, loading } = useGame();
+  const { currentPlayerId } = useAuth();
 
   const handleGameRestarted = (newGameId: string) => {
     navigate(`/game/${newGameId}/waiting`);
@@ -20,7 +22,6 @@ export default function FinalRankingPage() {
     onGameRestarted: handleGameRestarted,
   });
 
-  const currentPlayerId = localStorage.getItem('currentPlayerId');
   const isHost = state.players.some((p) => p.id === currentPlayerId && p.role === 'host');
 
   const entries: RankingEntry[] = state.players.map((p) => ({

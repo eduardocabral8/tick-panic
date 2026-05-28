@@ -17,7 +17,7 @@ OKLCH-equivalent palette. Pure black field, one signal color, one alarm color, t
 | `background`       | `#000000` | Page field. Never inverted.                       |
 | `text-primary`     | `#ffffff` | Active text, default input, timer at rest.        |
 | `text-secondary`   | `#666666` | Inactive, labels, hosts, placeholder, completed.  |
-| `text-tertiary`    | `#333333` | Pending states, hairline separators.              |
+| `text-tertiary`    | `#555555` | Pending states, hairline separators.              |
 | `accent`           | `#00ff88` | Your turn. Valid answer. Critical timer. Copied.  |
 | `error`            | `#ff2d00` | Invalid answer. Timer expired. Error state.       |
 
@@ -62,7 +62,7 @@ Spacing varies on purpose. Don't pad everything to `section` — the rhythm dies
 
 | Context                       | Value                          |
 |-------------------------------|--------------------------------|
-| Hairline separator            | `1px solid #333333`            |
+| Hairline separator            | `1px solid #555555`            |
 | Input underline (default)     | `2px solid #ffffff`            |
 | Input underline (focus)       | `2px solid #00ff88`            |
 | Outline button border         | `1px solid #ffffff` → accent on hover |

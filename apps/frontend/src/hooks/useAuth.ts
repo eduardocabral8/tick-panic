@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { login as apiLogin, register as apiRegister } from '../services/api.js';
+import { mapServerError } from '../services/errorMapper.js';
 
 function decodeJwtPayload(token: string): { sub?: string; username?: string; role?: string } | null {
   try {
@@ -34,8 +35,8 @@ export function useAuth() {
       localStorage.setItem('token', response.token);
       setToken(response.token);
       return true;
-    } catch {
-      setError('Invalid credentials');
+    } catch (e) {
+      setError(mapServerError(e, 'usuario o contraseña inválidos'));
       return false;
     }
   }, []);
@@ -45,8 +46,8 @@ export function useAuth() {
       setError(null);
       await apiRegister(username, password, role);
       return true;
-    } catch {
-      setError('Registration failed');
+    } catch (e) {
+      setError(mapServerError(e, 'no se pudo crear la cuenta'));
       return false;
     }
   }, []);
@@ -57,5 +58,7 @@ export function useAuth() {
     setError(null);
   }, []);
 
-  return { token, currentUser, error, login, register, logout };
+  const currentPlayerId = useMemo(() => localStorage.getItem('currentPlayerId'), []);
+
+  return { token, currentUser, currentPlayerId, error, login, register, logout };
 }

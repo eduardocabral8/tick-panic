@@ -9,9 +9,11 @@ interface AnswerListProps {
 }
 
 export default function AnswerList({ answers }: AnswerListProps) {
+  const reversedAnswers = [...answers].reverse();
+
   return (
     <ul className="space-y-element">
-      {answers.map((answer) => {
+      {reversedAnswers.map((answer) => {
         const isValid = answer.isValid === true;
         const isInvalid = answer.isValid === false;
 

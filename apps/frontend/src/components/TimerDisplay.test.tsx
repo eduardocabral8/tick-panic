@@ -47,4 +47,16 @@ describe('TimerDisplay', () => {
     render(<TimerDisplay remainingSeconds={0} totalSeconds={5} isActive onExpired={onExpired} />);
     expect(onExpired).toHaveBeenCalled();
   });
+
+  it('shows timer-flash on the 3 seconds threshold', () => {
+    const { container } = render(<TimerDisplay remainingSeconds={3} totalSeconds={5} isActive />);
+    const element = container.querySelector('.timer-flash');
+    expect(element).not.toBeNull();
+  });
+
+  it('shows timer-pulse-aggressive below 3 seconds', () => {
+    const { container } = render(<TimerDisplay remainingSeconds={2} totalSeconds={5} isActive />);
+    const element = container.querySelector('.timer-pulse-aggressive');
+    expect(element).not.toBeNull();
+  });
 });

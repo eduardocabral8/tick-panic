@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGameContext } from '../hooks/GameStateContext.js';
 import { useGameSocket } from '../hooks/useGameSocket.js';
 import { useTurn } from '../hooks/useTurn.js';
+import { useAuth } from '../hooks/useAuth.js';
 import PlayerRow from '../components/PlayerRow.js';
 import ConnectionBanner from '../components/ConnectionBanner.js';
 
@@ -11,9 +12,40 @@ export default function TurnResultsPage() {
   const navigate = useNavigate();
   const { state } = useGameContext();
   const { nextTurn, startTurn, validateAnswer } = useTurn();
+  const { currentPlayerId } = useAuth();
   const [error, setError] = useState('');
+  const [animatingPlayers, setAnimatingPlayers] = useState<Record<string, boolean>>({});
+  const prevScoresRef = useRef<Record<string, number>>({});
 
   const { connected } = useGameSocket(id ?? null);
+
+  useEffect(() => {
+    const newAnimating: Record<string, boolean> = {};
+    let hasChanges = false;
+
+    for (const player of state.players) {
+      const prevScore = prevScoresRef.current[player.id];
+      if (prevScore !== undefined && player.score > prevScore) {
+        newAnimating[player.id] = true;
+        hasChanges = true;
+      }
+    }
+
+    if (hasChanges) {
+      setAnimatingPlayers((prev) => ({ ...prev, ...newAnimating }));
+      Object.keys(newAnimating).forEach((playerId) => {
+        setTimeout(() => {
+          setAnimatingPlayers((prev) => ({ ...prev, [playerId]: false }));
+        }, 600);
+      });
+    }
+
+    const nextPrevScores: Record<string, number> = {};
+    for (const player of state.players) {
+      nextPrevScores[player.id] = player.score;
+    }
+    prevScoresRef.current = nextPrevScores;
+  }, [state.players]);
 
   useEffect(() => {
     if (state.currentTurn !== null && id) {
@@ -27,7 +59,6 @@ export default function TurnResultsPage() {
     }
   }, [state.gameStatus, id, navigate]);
 
-  const currentPlayerId = localStorage.getItem('currentPlayerId');
   const isHost = state.players.some((p) => p.id === currentPlayerId && p.role === 'host');
   const isOwnTurn = currentPlayerId === state.lastTurnPlayerId;
   const allValidated = state.answers.every((a) => a.isValid !== null);
@@ -37,8 +68,9 @@ export default function TurnResultsPage() {
     setError('');
     try {
       await validateAnswer(state.lastTurnId, answerId, isValid, currentPlayerId);
-    } catch {
-      setError('no se pudo validar la respuesta');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'no se pudo validar la respuesta';
+      setError(msg);
     }
   };
 
@@ -48,8 +80,9 @@ export default function TurnResultsPage() {
     try {
       await nextTurn(id);
       await startTurn(id);
-    } catch {
-      setError('no se pudo iniciar el siguiente turno');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'no se pudo iniciar el siguiente turno';
+      setError(msg);
     }
   };
 
@@ -58,7 +91,7 @@ export default function TurnResultsPage() {
       <ConnectionBanner connected={connected} />
       <h1 className="font-sans text-lg text-text-secondary">resultados del turno</h1>
 
-      <div className="w-full max-w-xs space-y-element">
+      <div className="w-full max-w-xs md:max-w-md space-y-element">
         {state.answers.map((answer) => (
           <div key={answer.id} className="flex flex-col space-y-element">
             <div className="font-sans text-sm text-text-primary">{answer.text}</div>
@@ -88,21 +121,27 @@ export default function TurnResultsPage() {
         ))}
       </div>
 
-      <div className="w-full max-w-xs space-y-element">
+      <div className="w-full max-w-xs md:max-w-md space-y-element">
         {state.players.map((player) => (
-          <PlayerRow
-            key={player.id}
-            name={player.name}
-            score={player.score}
-            isHost={player.role === 'host'}
-            isCurrentTurn={false}
-          />
+          <div key={player.id} className="relative">
+            <PlayerRow
+              name={player.name}
+              score={player.score}
+              isHost={player.role === 'host'}
+              isCurrentTurn={false}
+            />
+            {animatingPlayers[player.id] && (
+              <span className="absolute right-[24px] top-1/2 -translate-y-1/2 font-mono text-sm font-bold text-accent fade-up-score select-none">
+                +1
+              </span>
+            )}
+          </div>
         ))}
       </div>
 
       {allValidated && (
         isHost ? (
-          <button onClick={handleNext} className="btn-primary w-full max-w-xs">
+          <button onClick={handleNext} className="btn-primary w-full max-w-xs md:max-w-md">
             siguiente turno
           </button>
         ) : (

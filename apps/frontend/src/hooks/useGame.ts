@@ -6,6 +6,7 @@ import {
   endGame as apiEndGame,
   restartGame as apiRestartGame,
 } from '../services/api.js';
+import { mapServerError } from '../services/errorMapper.js';
 
 export function useGame() {
   const [loading, setLoading] = useState(false);
@@ -22,9 +23,10 @@ export function useGame() {
         localStorage.setItem('currentPlayerId', host.id);
       }
       return game.id;
-    } catch {
-      setError('no se pudo crear el juego');
-      throw new Error('no se pudo crear el juego');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo crear el juego');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -40,9 +42,10 @@ export function useGame() {
       if (joinedPlayer) {
         localStorage.setItem('currentPlayerId', joinedPlayer.id);
       }
-    } catch {
-      setError('no se pudo unir al juego');
-      throw new Error('no se pudo unir al juego');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo unir al juego');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -53,9 +56,10 @@ export function useGame() {
     setError(null);
     try {
       await apiStartGame(gameId, hostPlayerId);
-    } catch {
-      setError('no se pudo iniciar el juego');
-      throw new Error('no se pudo iniciar el juego');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo iniciar el juego');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -66,9 +70,10 @@ export function useGame() {
     setError(null);
     try {
       await apiEndGame(gameId);
-    } catch {
-      setError('no se pudo finalizar el juego');
-      throw new Error('no se pudo finalizar el juego');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo finalizar el juego');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -85,9 +90,10 @@ export function useGame() {
         localStorage.setItem('currentPlayerId', host.id);
       }
       return game.id;
-    } catch {
-      setError('no se pudo reiniciar el juego');
-      throw new Error('no se pudo reiniciar el juego');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo reiniciar el juego');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }

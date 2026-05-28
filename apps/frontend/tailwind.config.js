@@ -6,7 +6,7 @@ export default {
         background: '#000000',
         'text-primary': '#ffffff',
         'text-secondary': '#666666',
-        'text-tertiary': '#333333',
+        'text-tertiary': '#555555',
         accent: '#00ff88',
         error: '#ff2d00',
       },

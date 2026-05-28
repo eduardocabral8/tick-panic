@@ -19,11 +19,12 @@ export default function TimerDisplay({
   const safeRemaining = remainingSeconds ?? 0;
   const isCritical = isActive && safeRemaining <= 3 && safeRemaining > 0;
   const isExpired = isActive && safeRemaining <= 0;
+  const isFlashThreshold = isActive && safeRemaining === 3;
 
   const colorClass = isExpired
     ? 'text-error'
     : isCritical
-      ? 'text-accent timer-pulse-aggressive'
+      ? `text-accent ${isFlashThreshold ? 'timer-flash' : 'timer-pulse-aggressive'}`
       : isActive
         ? 'text-text-primary timer-pulse'
         : 'text-text-secondary';

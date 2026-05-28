@@ -23,4 +23,10 @@ describe('PlayerRow', () => {
     const { container } = render(<PlayerRow name="Alice" score={12} isHost={false} isCurrentTurn={false} />);
     expect(container.querySelector('.text-text-primary')).not.toBeNull();
   });
+
+  it('hides score when hideScore is true', () => {
+    render(<PlayerRow name="Alice" score={12} isHost={false} isCurrentTurn={false} hideScore />);
+    expect(screen.getByText('Alice')).toBeDefined();
+    expect(screen.queryByText('12')).toBeNull();
+  });
 });

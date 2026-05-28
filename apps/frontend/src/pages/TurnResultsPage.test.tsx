@@ -123,4 +123,20 @@ describe('TurnResultsPage', () => {
     expect(screen.queryByText('válido')).toBeNull();
     expect(screen.queryByText('inválido')).toBeNull();
   });
+
+  it('renders +1 animation when player score increases', () => {
+    setupPlayers([{ id: 'p1', name: 'alice', role: 'host', score: 0 }], 'p1');
+    const { rerender } = renderPage();
+    expect(screen.queryByText('+1')).toBeNull();
+
+    setupPlayers([{ id: 'p1', name: 'alice', role: 'host', score: 1 }], 'p1');
+    rerender(
+      <MemoryRouter initialEntries={['/game/abc/turn-results']}>
+        <Routes>
+          <Route path="/game/:id/turn-results" element={<TurnResultsPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('+1')).toBeDefined();
+  });
 });

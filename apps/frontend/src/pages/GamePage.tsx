@@ -4,6 +4,7 @@ import { useGameContext } from '../hooks/GameStateContext.js';
 import { useGameSocket } from '../hooks/useGameSocket.js';
 import { useTimer } from '../hooks/useTimer.js';
 import { useTurn } from '../hooks/useTurn.js';
+import { useAuth } from '../hooks/useAuth.js';
 import TimerDisplay from '../components/TimerDisplay.js';
 import CategoryDisplay from '../components/CategoryDisplay.js';
 import AnswerInput from '../components/AnswerInput.js';
@@ -17,8 +18,8 @@ export default function GamePage() {
   const navigate = useNavigate();
   const { state } = useGameContext();
   const { submitAnswer } = useTurn();
+  const { currentPlayerId } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const currentPlayerId = localStorage.getItem('currentPlayerId');
   const isMyTurn = state.currentTurn?.playerId === currentPlayerId;
   const turnActive = state.currentTurn !== null;
   const answerLimit = state.currentTurn?.timeLimit ?? 1;
@@ -76,7 +77,7 @@ export default function GamePage() {
         <CategoryDisplay categoryName={state.category.name} />
       )}
 
-      <div className="w-full max-w-xs space-y-element">
+      <div className="w-full max-w-xs md:max-w-md space-y-element">
         {turnActive && (
           isMyTurn ? (
             <div className="font-sans text-sm font-medium text-accent lowercase tracking-wide">
@@ -97,11 +98,11 @@ export default function GamePage() {
         {submitError && <div role="alert" aria-live="polite" className="text-error text-sm">{submitError}</div>}
       </div>
 
-      <div className="w-full max-w-xs">
+      <div className="w-full max-w-xs md:max-w-md">
         <AnswerList answers={state.answers} />
       </div>
 
-      <div className="w-full max-w-xs space-y-element">
+      <div className="w-full max-w-xs md:max-w-md space-y-element">
         {state.players.map((player) => (
           <PlayerRow
             key={player.id}

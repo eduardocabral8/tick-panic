@@ -4,6 +4,7 @@ import { useGameContext } from '../hooks/GameStateContext.js';
 import { useGameSocket } from '../hooks/useGameSocket.js';
 import { useGame } from '../hooks/useGame.js';
 import { useTurn } from '../hooks/useTurn.js';
+import { useAuth } from '../hooks/useAuth.js';
 import PlayerRow from '../components/PlayerRow.js';
 import GameCode from '../components/GameCode.js';
 import BackToLobbyButton from '../components/BackToLobbyButton.js';
@@ -15,6 +16,7 @@ export default function WaitingRoomPage() {
   const { state } = useGameContext();
   const { startGame, loading } = useGame();
   const { startTurn } = useTurn();
+  const { currentPlayerId } = useAuth();
 
   const { connected } = useGameSocket(id ?? null);
 
@@ -33,7 +35,6 @@ export default function WaitingRoomPage() {
     }
   };
 
-  const currentPlayerId = localStorage.getItem('currentPlayerId');
   const isHost = state.players.some((p) => p.role === 'host' && p.id === currentPlayerId);
 
   return (
@@ -42,12 +43,12 @@ export default function WaitingRoomPage() {
       <h1 className="font-sans text-lg text-text-secondary">sala de espera</h1>
       {id && <GameCode code={id} />}
       {isHost && (
-        <p className="font-sans text-xs text-text-secondary lowercase text-center max-w-xs">
+        <p className="font-sans text-xs text-text-secondary lowercase text-center max-w-xs md:max-w-md">
           comparte este código para que otros se unan
         </p>
       )}
 
-      <div className="w-full max-w-xs space-y-element">
+      <div className="w-full max-w-xs md:max-w-md space-y-element">
         {state.players.map((player) => (
           <PlayerRow
             key={player.id}
@@ -55,6 +56,7 @@ export default function WaitingRoomPage() {
             score={player.score}
             isHost={player.role === 'host'}
             isCurrentTurn={false}
+            hideScore={true}
           />
         ))}
         {state.players.length < 2 && (
@@ -66,7 +68,7 @@ export default function WaitingRoomPage() {
         )}
       </div>
 
-      <div className="w-full max-w-xs space-y-element pt-section">
+      <div className="w-full max-w-xs md:max-w-md space-y-element pt-section">
         {isHost && (
           <button
             onClick={handleStart}

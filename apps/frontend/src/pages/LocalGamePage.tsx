@@ -421,11 +421,11 @@ export default function LocalGamePage() {
             ranking final
           </h1>
 
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-sm md:max-w-md">
             <RankingList entries={rankingEntries} />
           </div>
 
-          <div className="w-full max-w-sm space-y-element pt-section">
+          <div className="w-full max-w-sm md:max-w-md space-y-element pt-section">
             <button onClick={handlePlayAgain} className="btn-primary w-full">
               jugar de nuevo
             </button>

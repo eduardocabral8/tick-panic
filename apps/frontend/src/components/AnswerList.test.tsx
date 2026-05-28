@@ -22,4 +22,14 @@ describe('AnswerList', () => {
     const { container } = render(<AnswerList answers={[{ id: '1', text: 'Perro', isValid: null }]} />);
     expect(container.querySelector('.text-text-secondary')).not.toBeNull();
   });
+
+  it('renders answers in reverse order (newest on top)', () => {
+    render(<AnswerList answers={[
+      { id: '1', text: 'uno', isValid: null },
+      { id: '2', text: 'dos', isValid: null }
+    ]} />);
+    const listItems = screen.getAllByRole('listitem');
+    expect(listItems[0].textContent).toContain('dos');
+    expect(listItems[1].textContent).toContain('uno');
+  });
 });

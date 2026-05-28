@@ -6,6 +6,7 @@ import {
   nextTurn as apiNextTurn,
   validateAnswer as apiValidateAnswer,
 } from '../services/api.js';
+import { mapServerError } from '../services/errorMapper.js';
 
 export function useTurn() {
   const [loading, setLoading] = useState(false);
@@ -16,9 +17,10 @@ export function useTurn() {
     setError(null);
     try {
       await apiStartTurn(gameId);
-    } catch {
-      setError('no se pudo iniciar el turno');
-      throw new Error('no se pudo iniciar el turno');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo iniciar el turno');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -29,9 +31,10 @@ export function useTurn() {
     setError(null);
     try {
       await apiSubmitAnswer(turnId, text, playerId);
-    } catch {
-      setError('no se pudo enviar la respuesta');
-      throw new Error('no se pudo enviar la respuesta');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo enviar la respuesta');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -42,9 +45,10 @@ export function useTurn() {
     setError(null);
     try {
       await apiFinishTurn(turnId);
-    } catch {
-      setError('no se pudo finalizar el turno');
-      throw new Error('no se pudo finalizar el turno');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo finalizar el turno');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -55,9 +59,10 @@ export function useTurn() {
     setError(null);
     try {
       await apiNextTurn(gameId);
-    } catch {
-      setError('no se pudo pasar al siguiente turno');
-      throw new Error('no se pudo pasar al siguiente turno');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo pasar al siguiente turno');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
@@ -68,9 +73,10 @@ export function useTurn() {
     setError(null);
     try {
       await apiValidateAnswer(turnId, answerId, isValid, playerId);
-    } catch {
-      setError('no se pudo validar la respuesta');
-      throw new Error('no se pudo validar la respuesta');
+    } catch (e) {
+      const msg = mapServerError(e, 'no se pudo validar la respuesta');
+      setError(msg);
+      throw new Error(msg, { cause: e });
     } finally {
       setLoading(false);
     }
