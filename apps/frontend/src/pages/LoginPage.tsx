@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
-      <h1 className="font-mono text-4xl font-bold text-text-primary mb-section">15 segundos</h1>
+      <h1 className="font-mono text-4xl font-bold text-text-primary mb-section">TickPanic</h1>
       <form onSubmit={handleSubmit} className="w-full max-w-xs space-y-section">
         <input
           type="text"

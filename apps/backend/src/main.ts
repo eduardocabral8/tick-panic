@@ -31,8 +31,8 @@ app.setErrorHandler(errorHandler);
 await app.register(swagger, {
   swagger: {
     info: {
-      title: '15 Segundos API',
-      description: 'API REST del juego multijugador 15 segundos',
+      title: 'TickPanic API',
+      description: 'API REST del juego multijugador TickPanic',
       version: '1.0.0',
     },
     host: `localhost:${PORT}`,

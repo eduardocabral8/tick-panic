@@ -32,7 +32,7 @@ export default function LobbyPage() {
 
   return (
     <div className="flex flex-col items-center space-y-section">
-      <h1 className="font-mono text-4xl font-bold text-text-primary">15 segundos</h1>
+      <h1 className="font-mono text-4xl font-bold text-text-primary">TickPanic</h1>
 
       <form onSubmit={handleCreate} className="w-full max-w-xs space-y-element">
         <h2 className="font-sans text-lg text-text-primary">crear juego</h2>

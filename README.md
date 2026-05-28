@@ -1,4 +1,4 @@
-# 15 Segundos
+# TickPanic
 
 Juego multijugador en tiempo real — velocidad mental, turnos cronometrados y mucha presión.
 
