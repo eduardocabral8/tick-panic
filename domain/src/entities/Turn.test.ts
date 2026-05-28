@@ -63,6 +63,17 @@ describe('Turn', () => {
     expect(turn.answers).toHaveLength(1);
   });
 
+  it('should allow multiple answers up to timeLimit', () => {
+    const turn = new Turn('round-1', 'player-1', 5, 1, defaultCategory);
+    const start = new Date('2024-01-01T00:00:00Z');
+    turn.start(start);
+    for (let i = 0; i < 5; i++) {
+      turn.submitAnswer(`answer-${i}`, new Date('2024-01-01T00:00:01Z'));
+    }
+    expect(turn.answers).toHaveLength(5);
+    expect(() => turn.submitAnswer('extra', new Date('2024-01-01T00:00:02Z'))).toThrow('Maximum answers reached for this turn');
+  });
+
   it('should throw when submitting if not ACTIVE', () => {
     const turn = new Turn('round-1', 'player-1', 5, 1, defaultCategory);
     expect(() => turn.submitAnswer('manzana', new Date())).toThrow('Turn is not active');

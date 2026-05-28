@@ -16,17 +16,17 @@ export default function AnswerInput({
   const [value, setValue] = useState('');
   const [flashing, setFlashing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const submittedRef = useRef(false);
+  const autoSubmittedRef = useRef(false);
 
   useEffect(() => {
     if (!disabled && !timerExpired) {
-      submittedRef.current = false;
+      autoSubmittedRef.current = false;
     }
   }, [disabled, timerExpired]);
 
   useEffect(() => {
-    if (timerExpired && !disabled && !submittedRef.current) {
-      submittedRef.current = true;
+    if (timerExpired && !disabled && !autoSubmittedRef.current) {
+      autoSubmittedRef.current = true;
       const finalValue = inputRef.current ? inputRef.current.value : value;
       onSubmit(finalValue);
     }
@@ -35,8 +35,7 @@ export default function AnswerInput({
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      if (value.trim() && !disabled && !timerExpired && !submittedRef.current) {
-        submittedRef.current = true;
+      if (value.trim() && !disabled && !timerExpired) {
         onSubmit(value.trim());
         setValue('');
         setFlashing(true);

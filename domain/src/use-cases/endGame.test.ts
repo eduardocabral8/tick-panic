@@ -12,14 +12,14 @@ describe('endGame', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       const round = game.rounds[i];
       round.turns.forEach(t => { t.start(new Date()); t.end(new Date()); });
-      if (i < 4) game.startNextRound(new Date());
+      if (i < 2) game.startNextRound(new Date());
     }
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const now = new Date();
@@ -46,14 +46,14 @@ describe('endGame', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       const round = game.rounds[i];
       round.turns.forEach(t => { t.start(new Date()); t.end(new Date()); });
-      if (i < 4) game.startNextRound(new Date());
+      if (i < 2) game.startNextRound(new Date());
     }
     game.finish(new Date());
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };

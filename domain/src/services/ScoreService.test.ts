@@ -24,7 +24,7 @@ describe('ScoreService', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -65,7 +65,7 @@ describe('ScoreService', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );

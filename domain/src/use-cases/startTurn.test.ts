@@ -13,7 +13,7 @@ describe('startTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -45,7 +45,7 @@ describe('startTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );

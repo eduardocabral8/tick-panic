@@ -61,8 +61,8 @@ export class Turn {
     if (this._startedAt === null) {
       throw new Error('Turn has not been started');
     }
-    if (this._answers.length >= 1) {
-      throw new Error('Only one answer per player is allowed');
+    if (this._answers.length >= this.timeLimit) {
+      throw new Error('Maximum answers reached for this turn');
     }
     const elapsed = now.getTime() - this._startedAt.getTime();
     if (elapsed >= this.timeLimit * 1000 + 500) {

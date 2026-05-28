@@ -13,7 +13,7 @@ describe('submitAnswer', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -39,7 +39,7 @@ describe('submitAnswer', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -55,7 +55,7 @@ describe('submitAnswer', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -72,7 +72,7 @@ describe('submitAnswer', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -85,21 +85,23 @@ describe('submitAnswer', () => {
     expect(() => submitAnswer(turn.id, 'respuesta', now, turnRepo, answerRepo)).toThrow('Time limit exceeded');
   });
 
-  it('should throw if player has already submitted an answer for this turn', () => {
+  it('should throw if player has submitted maximum answers for this turn', () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
     const turn = game.rounds[0].turns[0];
     turn.start(new Date());
-    turn.submitAnswer('first answer', new Date());
+    for (let i = 0; i < turn.timeLimit; i++) {
+      turn.submitAnswer(`answer-${i}`, new Date());
+    }
     const turnRepo: TurnRepository = { save: vi.fn(), findById: vi.fn(() => turn), findByRoundId: vi.fn(), findAll: vi.fn() };
     const answerRepo: AnswerRepository = { save: vi.fn(), findById: vi.fn(), findAll: vi.fn() };
-    expect(() => submitAnswer(turn.id, 'second answer', new Date(), turnRepo, answerRepo)).toThrow('Player has already submitted an answer for this turn');
+    expect(() => submitAnswer(turn.id, 'extra answer', new Date(), turnRepo, answerRepo)).toThrow('Maximum answers reached for this turn');
   });
 });

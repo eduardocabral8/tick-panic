@@ -17,11 +17,11 @@ export default function GamePage() {
   const { state } = useGameContext();
   const { submitAnswer } = useTurn();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
   const currentPlayerId = localStorage.getItem('currentPlayerId');
   const isMyTurn = state.currentTurn?.playerId === currentPlayerId;
   const turnActive = state.currentTurn !== null;
+  const answerLimit = state.currentTurn?.timeLimit ?? 1;
+  const hasSubmitted = state.answers.length >= answerLimit;
 
   useGameSocket(id ?? null);
 
@@ -31,11 +31,6 @@ export default function GamePage() {
   );
 
   const timerExpired = turnActive && remainingSeconds !== null && remainingSeconds <= 0;
-
-  useEffect(() => {
-    setSubmitting(false);
-    setHasSubmitted(false);
-  }, [state.currentTurn?.id]);
 
   useEffect(() => {
     if (state.gameStatus === 'FINISHED' && id) {
@@ -50,32 +45,29 @@ export default function GamePage() {
   }, [state.currentTurn, state.gameStatus, id, navigate]);
 
   const handleSubmitAnswer = async (text: string) => {
-    if (!state.currentTurn || !currentPlayerId || submitting || hasSubmitted) {
+    if (!state.currentTurn || !currentPlayerId || hasSubmitted) {
       return;
     }
-    setSubmitting(true);
     setSubmitError(null);
     try {
       await submitAnswer(state.currentTurn.id, text, currentPlayerId);
-      setHasSubmitted(true);
     } catch (e) {
       if (!timerExpired) {
         setSubmitError((e as Error).message || 'no se pudo enviar la respuesta');
       }
-    } finally {
-      setSubmitting(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center space-y-section">
-      <RoundIndicator currentRound={state.currentRound} />
+      <RoundIndicator currentRound={state.currentRound} totalRounds={3} />
 
       <TimerDisplay
         remainingSeconds={remainingSeconds}
         totalSeconds={state.currentTurn?.timeLimit ?? 0}
         isActive={turnActive}
         roundNumber={state.currentRound}
+        totalRounds={3}
       />
 
       {state.category && (
@@ -91,7 +83,7 @@ export default function GamePage() {
         <AnswerInput
           key={state.currentTurn?.id || 'no-turn'}
           onSubmit={handleSubmitAnswer}
-          disabled={!isMyTurn || !turnActive || submitting || hasSubmitted}
+          disabled={!isMyTurn || !turnActive || hasSubmitted}
           timerExpired={timerExpired}
         />
         {submitError && <div className="text-error text-sm">{submitError}</div>}

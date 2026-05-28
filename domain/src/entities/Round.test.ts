@@ -22,11 +22,9 @@ describe('Round', () => {
 
   it('should derive itemCount from roundNumber', () => {
     const cat = new Category('frutas');
-    expect(new Round('game-1', 1, cat).itemCount).toBe(1);
-    expect(new Round('game-1', 2, cat).itemCount).toBe(1);
-    expect(new Round('game-1', 3, cat).itemCount).toBe(1);
-    expect(new Round('game-1', 4, cat).itemCount).toBe(1);
-    expect(new Round('game-1', 5, cat).itemCount).toBe(1);
+    expect(new Round('game-1', 1, cat).itemCount).toBe(5);
+    expect(new Round('game-1', 2, cat).itemCount).toBe(4);
+    expect(new Round('game-1', 3, cat).itemCount).toBe(3);
   });
 
   it('should derive timeLimit from roundNumber', () => {
@@ -34,14 +32,12 @@ describe('Round', () => {
     expect(new Round('game-1', 1, cat).timeLimit).toBe(5);
     expect(new Round('game-1', 2, cat).timeLimit).toBe(4);
     expect(new Round('game-1', 3, cat).timeLimit).toBe(3);
-    expect(new Round('game-1', 4, cat).timeLimit).toBe(2);
-    expect(new Round('game-1', 5, cat).timeLimit).toBe(1);
   });
 
   it('should throw for invalid roundNumber', () => {
     const cat = new Category('frutas');
-    expect(() => new Round('game-1', 0, cat)).toThrow('Round number must be between 1 and 5');
-    expect(() => new Round('game-1', 6, cat)).toThrow('Round number must be between 1 and 5');
+    expect(() => new Round('game-1', 0, cat)).toThrow('Round number must be between 1 and 3');
+    expect(() => new Round('game-1', 4, cat)).toThrow('Round number must be between 1 and 3');
   });
 
   it('should start with PENDING status', () => {

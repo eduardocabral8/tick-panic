@@ -70,14 +70,14 @@ export class Game {
     if (this._players.length < 2) {
       throw new Error('At least 2 players are required');
     }
-    if (categories.length < 5) {
-      throw new Error('At least 5 categories are required');
+    if (categories.length < 3) {
+      throw new Error('At least 3 categories are required');
     }
 
     this._categories = categories;
     this._randomizer = randomizer;
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 3; i++) {
       const category = randomizer(categories);
       this._rounds.push(new Round(this.id, i, category));
     }
@@ -98,7 +98,7 @@ export class Game {
     }
 
     this._currentRoundIndex += 1;
-    if (this._currentRoundIndex >= 5) {
+    if (this._currentRoundIndex >= 3) {
       this.finish(now);
     } else {
       this._createTurnsForRound(this._currentRoundIndex);

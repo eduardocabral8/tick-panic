@@ -13,6 +13,11 @@ describe('TimerDisplay', () => {
     expect(screen.getByText('ronda 3 de 5')).toBeDefined();
   });
 
+  it('shows custom total rounds when totalRounds is provided', () => {
+    render(<TimerDisplay remainingSeconds={5} totalSeconds={5} isActive={false} roundNumber={3} totalRounds={3} />);
+    expect(screen.getByText('ronda 3 de 3')).toBeDefined();
+  });
+
   it('shows white text when active and more than 3 seconds', () => {
     const { container } = render(<TimerDisplay remainingSeconds={5} totalSeconds={5} isActive />);
     const element = container.querySelector('.text-text-primary');

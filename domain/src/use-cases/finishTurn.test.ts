@@ -14,7 +14,7 @@ describe('finishTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -32,10 +32,12 @@ describe('finishTurn', () => {
 
   it('should finish turn as COMPLETED when answer meets itemCount and within time', () => {
     const category = new Category('test');
-    const round = new Round('game-1', 5, category);
+    const round = new Round('game-1', 3, category);
     const turn = round.createTurn('player-1', category);
     turn.start(new Date('2024-01-01T00:00:00.000Z'));
-    turn.submitAnswer('answer', new Date('2024-01-01T00:00:00.500Z'));
+    for (let i = 0; i < round.itemCount; i++) {
+      turn.submitAnswer(`answer-${i}`, new Date('2024-01-01T00:00:00.500Z'));
+    }
     const turnRepo: TurnRepository = { save: vi.fn(), findById: vi.fn(() => turn), findByRoundId: vi.fn(), findAll: vi.fn() };
     const roundRepo: RoundRepository = { save: vi.fn(), findById: vi.fn(() => round), findByGameId: vi.fn(), findAll: vi.fn() };
     const now = new Date('2024-01-01T00:00:00.900Z');
@@ -49,7 +51,7 @@ describe('finishTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -78,7 +80,7 @@ describe('finishTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -94,7 +96,7 @@ describe('finishTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -134,7 +136,7 @@ describe('finishTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );

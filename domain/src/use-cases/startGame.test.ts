@@ -15,12 +15,12 @@ describe('startGame', () => {
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
       save: vi.fn().mockResolvedValue(undefined),
-      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c')]),
       findById: vi.fn().mockResolvedValue(null),
     };
     const updated = await startGame(game.id, host.id, gameRepo, categoryRepo);
     expect(updated.status).toBe('IN_PROGRESS');
-    expect(updated.rounds).toHaveLength(5);
+    expect(updated.rounds).toHaveLength(3);
     expect(gameRepo.save).toHaveBeenCalledWith(game);
   });
 
@@ -43,7 +43,7 @@ describe('startGame', () => {
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
       save: vi.fn().mockResolvedValue(undefined),
-      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c')]),
       findById: vi.fn().mockResolvedValue(null),
     };
     await expect(startGame(game.id, bob.id, gameRepo, categoryRepo)).rejects.toThrow('Only the host can start the game');
@@ -56,13 +56,13 @@ describe('startGame', () => {
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
       save: vi.fn().mockResolvedValue(undefined),
-      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c')]),
       findById: vi.fn().mockResolvedValue(null),
     };
     await expect(startGame(game.id, host.id, gameRepo, categoryRepo)).rejects.toThrow('At least 2 players are required');
   });
 
-  it('should throw if less than 5 categories', async () => {
+  it('should throw if less than 3 categories', async () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
@@ -70,10 +70,10 @@ describe('startGame', () => {
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
       save: vi.fn().mockResolvedValue(undefined),
-      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d')]),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b')]),
       findById: vi.fn().mockResolvedValue(null),
     };
-    await expect(startGame(game.id, host.id, gameRepo, categoryRepo)).rejects.toThrow('At least 5 categories are required');
+    await expect(startGame(game.id, host.id, gameRepo, categoryRepo)).rejects.toThrow('At least 3 categories are required');
   });
 
   it('should throw if game already started', async () => {
@@ -82,14 +82,14 @@ describe('startGame', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const categoryRepo: CategoryRepository = {
       save: vi.fn().mockResolvedValue(undefined),
-      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')]),
+      findAll: vi.fn().mockResolvedValue([new Category('a'), new Category('b'), new Category('c')]),
       findById: vi.fn().mockResolvedValue(null),
     };
     await expect(startGame(game.id, host.id, gameRepo, categoryRepo)).rejects.toThrow('Game has already started');

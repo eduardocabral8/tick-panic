@@ -12,7 +12,7 @@ describe('nextTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -31,7 +31,7 @@ describe('nextTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
@@ -43,19 +43,19 @@ describe('nextTurn', () => {
     expect(gameRepo.save).toHaveBeenCalledWith(game);
   });
 
-  it('should finish game after 5th round and return null', () => {
+  it('should finish game after 3rd round and return null', () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       game.rounds[i].turns.forEach(t => { t.start(new Date()); t.end(new Date()); });
-      if (i < 4) game.startNextRound(new Date());
+      if (i < 2) game.startNextRound(new Date());
     }
     const gameRepo: GameRepository = { save: vi.fn(), findById: vi.fn(() => game), findAll: vi.fn() };
     const result = nextTurn(game.id, new Date(), gameRepo);
@@ -81,7 +81,7 @@ describe('nextTurn', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       (cats) => cats[0],
       host.id
     );

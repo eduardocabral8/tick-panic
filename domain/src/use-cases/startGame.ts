@@ -9,8 +9,8 @@ export async function startGame(gameId: string, hostPlayerId: string, gameRepo: 
     throw new Error('Game not found');
   }
   const categories = await categoryRepo.findAll();
-  if (categories.length < 5) {
-    throw new Error('At least 5 categories are required');
+  if (categories.length < 3) {
+    throw new Error('At least 3 categories are required');
   }
   const randomizer = (cats: Category[]) => cats[Math.floor(Math.random() * cats.length)];
   game.start(categories, randomizer, hostPlayerId);

@@ -88,8 +88,6 @@ describe('turnController', () => {
       new Category('Animals', ['Dog']),
       new Category('Fruits', ['Apple']),
       new Category('Colors', ['Red']),
-      new Category('Countries', ['USA']),
-      new Category('Sports', ['Soccer']),
     ];
     game.start(categories, (cats) => cats[0], host.id);
     gameRepo.save(game);
@@ -137,8 +135,6 @@ describe('turnController', () => {
       new Category('Animals', ['Dog']),
       new Category('Fruits', ['Apple']),
       new Category('Colors', ['Red']),
-      new Category('Countries', ['USA']),
-      new Category('Sports', ['Soccer']),
     ];
     game.start(categories, (cats) => cats[0], host.id);
     gameRepo.save(game);
@@ -185,8 +181,6 @@ describe('turnController', () => {
       new Category('Animals', ['Dog']),
       new Category('Fruits', ['Apple']),
       new Category('Colors', ['Red']),
-      new Category('Countries', ['USA']),
-      new Category('Sports', ['Soccer']),
     ];
     game.start(categories, (cats) => cats[0], host.id);
     gameRepo.save(game);
@@ -227,8 +221,6 @@ describe('turnController', () => {
       new Category('Animals', ['Dog']),
       new Category('Fruits', ['Apple']),
       new Category('Colors', ['Red']),
-      new Category('Countries', ['USA']),
-      new Category('Sports', ['Soccer']),
     ];
     game.start(categories, (cats) => cats[0], host.id);
     gameRepo.save(game);
@@ -281,8 +273,6 @@ describe('turnController', () => {
       new Category('Animals', ['Dog']),
       new Category('Fruits', ['Apple']),
       new Category('Colors', ['Red']),
-      new Category('Countries', ['USA']),
-      new Category('Sports', ['Soccer']),
     ];
     game.start(categories, (cats) => cats[0], host.id);
     gameRepo.save(game);
@@ -310,7 +300,7 @@ describe('turnController', () => {
     expect(body.error).toBe('Cannot validate your own answer');
   });
 
-  it('should return 400 when submitting multiple answers for the same turn', async () => {
+  it('should return 400 when submitting more than timeLimit answers for the same turn', async () => {
     const { app, gameRepo, turnRepo, roundRepo } = createApp();
     const { Game, Player, Category } = await import('@15-seconds/domain');
 
@@ -325,8 +315,6 @@ describe('turnController', () => {
       new Category('Animals', ['Dog']),
       new Category('Fruits', ['Apple']),
       new Category('Colors', ['Red']),
-      new Category('Countries', ['USA']),
-      new Category('Sports', ['Soccer']),
     ];
     game.start(categories, (cats) => cats[0], host.id);
     gameRepo.save(game);
@@ -341,20 +329,22 @@ describe('turnController', () => {
     turn.start(new Date());
     turnRepo.save(turn);
 
-    await app.inject({
-      method: 'POST',
-      url: `/api/turns/${turn.id}/answers`,
-      payload: { text: 'first', playerId: turn.playerId },
-    });
+    for (let i = 0; i < turn.timeLimit; i++) {
+      await app.inject({
+        method: 'POST',
+        url: `/api/turns/${turn.id}/answers`,
+        payload: { text: `answer-${i}`, playerId: turn.playerId },
+      });
+    }
 
     const response = await app.inject({
       method: 'POST',
       url: `/api/turns/${turn.id}/answers`,
-      payload: { text: 'second', playerId: turn.playerId },
+      payload: { text: 'extra', playerId: turn.playerId },
     });
 
     expect(response.statusCode).toBe(400);
     const body = JSON.parse(response.body);
-    expect(body.error).toBe('Player has already submitted an answer for this turn');
+    expect(body.error).toBe('Maximum answers reached for this turn');
   });
 });

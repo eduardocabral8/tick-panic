@@ -48,7 +48,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -68,25 +68,25 @@ describe('Game', () => {
     game.addPlayer(host);
     expect(() =>
       game.start(
-        [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+        [new Category('a'), new Category('b'), new Category('c')],
         () => new Category('x'),
         host.id
       )
     ).toThrow('At least 2 players are required');
   });
 
-  it('should throw when starting with less than 5 categories', () => {
+  it('should throw when starting with less than 3 categories', () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     expect(() =>
       game.start(
-        [new Category('a'), new Category('b'), new Category('c'), new Category('d')],
+        [new Category('a'), new Category('b')],
         () => new Category('x'),
         host.id
       )
-    ).toThrow('At least 5 categories are required');
+    ).toThrow('At least 3 categories are required');
   });
 
   it('should throw when starting if caller is not the host', () => {
@@ -97,51 +97,45 @@ describe('Game', () => {
     game.addPlayer(bob);
     expect(() =>
       game.start(
-        [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+        [new Category('a'), new Category('b'), new Category('c')],
         () => new Category('x'),
         bob.id
       )
     ).toThrow('Only the host can start the game');
   });
 
-  it('should create exactly 5 rounds on start', () => {
+  it('should create exactly 3 rounds on start', () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
-    expect(game.rounds).toHaveLength(5);
+    expect(game.rounds).toHaveLength(3);
   });
 
-  it('should create rounds with fixed descending config [5,4,3,2,1]', () => {
+  it('should create rounds with fixed descending config [5,4,3]', () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
     expect(game.rounds[0].roundNumber).toBe(1);
-    expect(game.rounds[0].itemCount).toBe(1);
+    expect(game.rounds[0].itemCount).toBe(5);
     expect(game.rounds[0].timeLimit).toBe(5);
     expect(game.rounds[1].roundNumber).toBe(2);
-    expect(game.rounds[1].itemCount).toBe(1);
+    expect(game.rounds[1].itemCount).toBe(4);
     expect(game.rounds[1].timeLimit).toBe(4);
     expect(game.rounds[2].roundNumber).toBe(3);
-    expect(game.rounds[2].itemCount).toBe(1);
+    expect(game.rounds[2].itemCount).toBe(3);
     expect(game.rounds[2].timeLimit).toBe(3);
-    expect(game.rounds[3].roundNumber).toBe(4);
-    expect(game.rounds[3].itemCount).toBe(1);
-    expect(game.rounds[3].timeLimit).toBe(2);
-    expect(game.rounds[4].roundNumber).toBe(5);
-    expect(game.rounds[4].itemCount).toBe(1);
-    expect(game.rounds[4].timeLimit).toBe(1);
   });
 
   it('should assign categories using the randomizer for rounds', () => {
@@ -153,23 +147,17 @@ describe('Game', () => {
       new Category('frutas'),
       new Category('países'),
       new Category('animales'),
-      new Category('colores'),
-      new Category('profesiones'),
     ];
     const randomizer = vi.fn();
     randomizer.mockReturnValueOnce(categories[2])
       .mockReturnValueOnce(categories[0])
-      .mockReturnValueOnce(categories[4])
       .mockReturnValueOnce(categories[1])
-      .mockReturnValueOnce(categories[3])
       .mockReturnValueOnce(categories[0])
       .mockReturnValueOnce(categories[1]);
     game.start(categories, randomizer, host.id);
     expect(game.rounds[0].category.name).toBe('animales');
     expect(game.rounds[1].category.name).toBe('frutas');
-    expect(game.rounds[2].category.name).toBe('profesiones');
-    expect(game.rounds[3].category.name).toBe('países');
-    expect(game.rounds[4].category.name).toBe('colores');
+    expect(game.rounds[2].category.name).toBe('países');
     expect(game.rounds[0].turns[0].category.name).toBe('frutas');
     expect(game.rounds[0].turns[1].category.name).toBe('países');
   });
@@ -201,7 +189,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -216,7 +204,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -232,7 +220,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -251,7 +239,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -271,7 +259,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -289,25 +277,25 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(new Player('Bob', 'player', new Date()));
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
     expect(() => game.startNextRound(new Date())).toThrow('Current round is not completed');
   });
 
-  it('should finish game after 5th round', () => {
+  it('should finish game after 3rd round', () => {
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
     const bob = new Player('Bob', 'player', new Date());
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       const round = game.rounds[i];
       round.turns.forEach(t => {
         t.start(new Date());
@@ -326,7 +314,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -345,7 +333,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -366,7 +354,7 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
@@ -380,7 +368,7 @@ describe('Game', () => {
     turnBob.end(new Date());
     game.startNextRound(new Date());
 
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i < 3; i++) {
       game.rounds[i].turns.forEach(t => { t.start(new Date()); t.end(new Date()); });
       game.startNextRound(new Date());
     }
@@ -394,14 +382,14 @@ describe('Game', () => {
     game.addPlayer(host);
     game.addPlayer(bob);
     game.start(
-      [new Category('a'), new Category('b'), new Category('c'), new Category('d'), new Category('e')],
+      [new Category('a'), new Category('b'), new Category('c')],
       () => new Category('x'),
       host.id
     );
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       const round = game.rounds[i];
       round.turns.forEach(t => { t.start(new Date()); t.end(new Date()); });
-      if (i < 4) game.startNextRound(new Date());
+      if (i < 2) game.startNextRound(new Date());
     }
     expect(game.winner).toBeNull();
   });

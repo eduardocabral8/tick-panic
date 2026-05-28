@@ -14,15 +14,15 @@ export class Round {
   private _turns: Turn[] = [];
 
   constructor(gameId: string, roundNumber: number, category: Category) {
-    if (roundNumber < 1 || roundNumber > 5) {
-      throw new Error('Round number must be between 1 and 5');
+    if (roundNumber < 1 || roundNumber > 3) {
+      throw new Error('Round number must be between 1 and 3');
     }
     this.id = crypto.randomUUID();
     this.gameId = gameId;
     this.roundNumber = roundNumber;
     this.category = category;
-    this.itemCount = 1;
     this.timeLimit = 6 - roundNumber;
+    this.itemCount = this.timeLimit;
   }
 
   get status(): RoundStatus {

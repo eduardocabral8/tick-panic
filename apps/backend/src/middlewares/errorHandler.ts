@@ -31,7 +31,7 @@ export async function errorHandler(error: Error, request: FastifyRequest, reply:
       message === 'Player name must be 50 characters or less' ||
       message === 'Answer text is required' ||
       message === 'At least 2 players are required' ||
-      message === 'At least 5 categories are required' ||
+      message === 'At least 3 categories are required' ||
       message === 'Cannot add players after game has started' ||
       message === 'Game is not in progress' ||
       message === 'No active round' ||
@@ -43,10 +43,10 @@ export async function errorHandler(error: Error, request: FastifyRequest, reply:
       message === 'Time limit exceeded' ||
       message === 'Turn cannot be finished yet' ||
       message === 'Current round is not completed' ||
-      message === 'Round number must be between 1 and 5' ||
+      message === 'Round number must be between 1 and 3' ||
       message === 'Role must be admin or player' ||
       message === 'Role must be host or player' ||
-      message === 'Player has already submitted an answer for this turn') {
+      message === 'Maximum answers reached for this turn') {
     reply.status(400).send({ error: message });
     return;
   }

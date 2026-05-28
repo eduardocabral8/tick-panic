@@ -122,7 +122,7 @@ describe('gameController', () => {
       payload: { playerName: 'Bob' },
     });
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       categoryRepo.save(new Category(`category-${i}`, []));
     }
 
@@ -136,7 +136,7 @@ describe('gameController', () => {
 
     expect(response.statusCode).toBe(200);
     const body = JSON.parse(response.body);
-    expect(body.rounds).toHaveLength(5);
+    expect(body.rounds).toHaveLength(3);
     expect(body.rounds[0].turns[0].timeLimit).toBeGreaterThan(0);
     expect(body.rounds[0].turns[0].startedAt).toBeNull();
   });
