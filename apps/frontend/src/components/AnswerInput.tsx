@@ -28,7 +28,9 @@ export default function AnswerInput({
     if (timerExpired && !disabled && !autoSubmittedRef.current) {
       autoSubmittedRef.current = true;
       const finalValue = inputRef.current ? inputRef.current.value : value;
-      onSubmit(finalValue);
+      if (finalValue.trim()) {
+        onSubmit(finalValue.trim());
+      }
     }
   }, [timerExpired, disabled, onSubmit, value]);
 
