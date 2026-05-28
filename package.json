@@ -1,9 +1,9 @@
 {
-  "name": "15-seconds",
+  "name": "tick-panic",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Juego multijugador 15 segundos",
+  "description": "A fast-paced, high-pressure real-time multiplayer party game with shrinking time limits.",
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r test",
