@@ -22,7 +22,7 @@ export default function AnswerList({ answers }: AnswerListProps) {
             key={answer.id}
             className={`font-sans text-sm ${
               isValid
-                ? 'text-accent'
+                ? 'text-valid'
                 : isInvalid
                   ? 'text-error line-through'
                   : 'text-text-primary'

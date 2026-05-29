@@ -36,7 +36,7 @@ export default function TurnResultsPage() {
       Object.keys(newAnimating).forEach((playerId) => {
         setTimeout(() => {
           setAnimatingPlayers((prev) => ({ ...prev, [playerId]: false }));
-        }, 600);
+        }, 1100);
       });
     }
 
@@ -99,7 +99,7 @@ export default function TurnResultsPage() {
               <div className="flex space-x-element">
                 <button
                   onClick={() => handleValidate(answer.id, true)}
-                  className="btn-primary flex-1"
+                  className="btn-valid flex-1"
                 >
                   válido
                 </button>
@@ -112,7 +112,7 @@ export default function TurnResultsPage() {
               </div>
             )}
             {answer.isValid === true && (
-              <div className="font-sans text-sm text-accent">válido</div>
+              <div className="font-sans text-sm text-valid">válido</div>
             )}
             {answer.isValid === false && (
               <div className="font-sans text-sm text-error">inválido</div>
@@ -131,7 +131,7 @@ export default function TurnResultsPage() {
               isCurrentTurn={false}
             />
             {animatingPlayers[player.id] && (
-              <span className="absolute right-[24px] top-1/2 -translate-y-1/2 font-mono text-sm font-bold text-accent fade-up-score select-none">
+              <span className="absolute right-8 top-1/2 -translate-y-1/2 font-mono text-sm font-bold text-valid fade-up-score select-none">
                 +1
               </span>
             )}

@@ -3,14 +3,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#000000',
-        'text-primary': '#ffffff',
-        'text-secondary': '#666666',
-        'text-tertiary': '#555555',
-        accent: '#00ff88',
-        error: '#ff2d00',
+        background: '#0B0B0D',
+        surface: '#16161A',
+        'text-primary': '#F4F2EC',
+        'text-secondary': '#87867E',
+        'text-tertiary': '#3C3C40',
+        accent: '#FF2E7E',
+        valid: '#34D9A0',
+        error: '#FF3B30',
       },
       fontFamily: {
+        display: ['Anton', 'sans-serif'],
         sans: ['"Space Grotesk"', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'monospace'],
       },

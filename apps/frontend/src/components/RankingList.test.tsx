@@ -37,15 +37,15 @@ describe('RankingList', () => {
     expect(items[1].className).not.toContain('bg-accent');
   });
 
-  it('highlights all entries tied for the top score', () => {
+  it('highlights nobody when the top score is tied', () => {
     make([
       { id: '1', name: 'alice', score: 5 },
       { id: '2', name: 'bob', score: 5 },
       { id: '3', name: 'carla', score: 2 },
     ]);
     const items = screen.getAllByRole('listitem');
-    expect(items[0].className).toContain('bg-accent');
-    expect(items[1].className).toContain('bg-accent');
+    expect(items[0].className).not.toContain('bg-accent');
+    expect(items[1].className).not.toContain('bg-accent');
     expect(items[2].className).not.toContain('bg-accent');
   });
 

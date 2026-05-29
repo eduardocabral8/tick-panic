@@ -59,14 +59,14 @@ export default function AnswerInput({
         disabled={isBlocked}
         placeholder={placeholder}
         aria-label="respuesta"
-        className={`flex-1 border-b-2 bg-transparent py-element text-2xl text-text-primary placeholder:text-text-secondary focus:outline-none disabled:opacity-30 transition-colors duration-300 ${
+        className={`min-w-0 flex-1 border-b-2 bg-transparent py-element text-2xl text-text-primary placeholder:text-text-secondary focus:outline-none disabled:opacity-30 transition-colors duration-300 ${
           flashing ? 'border-accent' : 'border-text-primary focus:border-accent'
         }`}
       />
       <button
         type="submit"
         disabled={isBlocked || !value.trim()}
-        className="btn-primary px-4"
+        className="btn-primary px-4 shrink-0"
       >
         enviar
       </button>

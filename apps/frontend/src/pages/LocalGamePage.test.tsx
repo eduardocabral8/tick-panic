@@ -38,7 +38,7 @@ describe('LocalGamePage', () => {
 
     // Debe mostrar la pantalla de elegir categoría para Sofia
     expect(screen.getByText('asignale una categoría a Mateo')).toBeDefined();
-    expect(screen.getByPlaceholderText('escribí una categoría aquí...')).toBeDefined();
+    expect(screen.getByPlaceholderText('escribe una categoría')).toBeDefined();
   });
 
   it('allows random category generation and manually typing category', () => {
@@ -56,7 +56,7 @@ describe('LocalGamePage', () => {
     fireEvent.click(screen.getByText('iniciar juego'));
 
     // Escribir manual
-    const categoryInput = screen.getByPlaceholderText('escribí una categoría aquí...');
+    const categoryInput = screen.getByPlaceholderText('escribe una categoría');
     fireEvent.change(categoryInput, { target: { value: 'Marcas de auto' } });
     expect(screen.getByText('Marcas de auto')).toBeDefined();
 
@@ -82,7 +82,7 @@ describe('LocalGamePage', () => {
     fireEvent.click(screen.getByText('iniciar juego'));
 
     // 1. CHOOSE_CATEGORY
-    fireEvent.change(screen.getByPlaceholderText('escribí una categoría aquí...'), {
+    fireEvent.change(screen.getByPlaceholderText('escribe una categoría'), {
       target: { value: 'Colores' },
     });
     fireEvent.click(screen.getByText('guardar y pasar dispositivo'));
@@ -135,7 +135,7 @@ describe('LocalGamePage', () => {
     fireEvent.click(screen.getByText('iniciar juego'));
 
     // Definir categoría y empezar
-    fireEvent.change(screen.getByPlaceholderText('escribí una categoría aquí...'), {
+    fireEvent.change(screen.getByPlaceholderText('escribe una categoría'), {
       target: { value: 'Paises' },
     });
     fireEvent.click(screen.getByText('guardar y pasar dispositivo'));
@@ -144,12 +144,15 @@ describe('LocalGamePage', () => {
     // En ronda 1 el time limit es 5 segundos
     expect(screen.getByText('5', { selector: '.font-mono' })).toBeDefined();
 
-    // Avanzar 5 segundos en el reloj
+    // Avanzar 5 segundos en el reloj: el contador llega a 0 (se sostiene en rojo)
     act(() => {
       vi.advanceTimersByTime(5000);
     });
 
-    // Debe saltar automáticamente a la pantalla de transición de validación
+    // Tras un breve hold del "0", salta a la pantalla de validación
+    act(() => {
+      vi.advanceTimersByTime(800);
+    });
     expect(screen.getByText('tiempo terminado')).toBeDefined();
 
     vi.useRealTimers();

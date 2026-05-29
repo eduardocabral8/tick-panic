@@ -34,7 +34,8 @@ export default function FinalRankingPage() {
   const handlePlayAgain = async () => {
     if (!id || !isHost) return;
     try {
-      await restartGame(id);
+      const newGameId = await restartGame(id);
+      navigate(`/game/${newGameId}/waiting`);
     } catch {
       return;
     }
@@ -61,14 +62,9 @@ export default function FinalRankingPage() {
             jugar de nuevo
           </button>
         ) : (
-          <>
-            <button disabled className="btn-primary w-full">
-              jugar de nuevo
-            </button>
-            <p className="font-sans text-xs text-text-secondary lowercase text-center">
-              esperando al host
-            </p>
-          </>
+          <p className="mb-section font-sans text-xs text-text-secondary lowercase text-center">
+            esperando a que el host inicie otra partida
+          </p>
         )}
         <BackToLobbyButton />
       </div>

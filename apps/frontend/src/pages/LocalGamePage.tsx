@@ -4,6 +4,7 @@ import RoundIndicator from '../components/RoundIndicator.js';
 import TimerDisplay from '../components/TimerDisplay.js';
 import CategoryDisplay from '../components/CategoryDisplay.js';
 import RankingList, { type RankingEntry } from '../components/RankingList.js';
+import Wordmark from '../components/Wordmark.js';
 import { getCategories } from '../services/api.js';
 
 type ScreenState =
@@ -67,8 +68,8 @@ export default function LocalGamePage() {
 
   // Obtener nombres amigables
   const getPlayerName = (key: 'p1' | 'p2') => {
-    if (key === 'p1') return p1Name.trim() || 'Jugador 1';
-    return p2Name.trim() || 'Jugador 2';
+    if (key === 'p1') return p1Name.trim() || 'jugador 1';
+    return p2Name.trim() || 'jugador 2';
   };
 
   const guesserName = getPlayerName(currentGuesser);
@@ -123,8 +124,8 @@ export default function LocalGamePage() {
 
     if (remainingSeconds <= 0) {
       if (timerRef.current) clearInterval(timerRef.current);
-      setScreen('PASS_TO_VALIDATE');
-      return;
+      const expiredHold = setTimeout(() => setScreen('PASS_TO_VALIDATE'), 800);
+      return () => clearTimeout(expiredHold);
     }
 
     timerRef.current = setInterval(() => {
@@ -186,7 +187,7 @@ export default function LocalGamePage() {
       {screen === 'SETUP' && (
         <div className="w-full space-y-section">
           <div className="text-center">
-            <h1 className="font-mono text-4xl font-bold text-text-primary mb-element">tickpanic</h1>
+            <h1 className="mb-element"><Wordmark className="text-5xl md:text-6xl" /></h1>
             <span className="font-sans text-sm text-accent lowercase">modo local</span>
           </div>
 
@@ -227,7 +228,7 @@ export default function LocalGamePage() {
                     startingChoice === 'p1' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
-                  {getPlayerName('p1')}
+                  <span className="normal-case">{getPlayerName('p1')}</span>
                 </button>
                 <button
                   type="button"
@@ -238,7 +239,7 @@ export default function LocalGamePage() {
                     startingChoice === 'p2' ? 'border-accent bg-accent text-background' : 'border-text-tertiary text-text-primary'
                   }`}
                 >
-                  {getPlayerName('p2')}
+                  <span className="normal-case">{getPlayerName('p2')}</span>
                 </button>
                 <button
                   type="button"
@@ -277,22 +278,22 @@ export default function LocalGamePage() {
           
           <div className="py-section">
             <h2 className="font-sans text-lg text-text-primary lowercase">
-              turno de <span className="text-accent font-bold">{chooserName}</span>
+              turno de <span className="text-accent font-bold normal-case">{chooserName}</span>
             </h2>
-            <p className="font-sans text-sm text-text-secondary mt-element lowercase">
+            <p className="font-sans text-sm text-text-secondary mt-element">
               asignale una categoría a {guesserName}
             </p>
           </div>
 
           <div className="space-y-section pt-element">
-            <div className="flex space-x-element">
+            <div className="flex items-center gap-4">
               <input
                 type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                placeholder="escribí una categoría aquí..."
+                placeholder="escribe una categoría"
                 aria-label="categoría"
-                className="flex-1 border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
+                className="min-w-0 flex-1 border-b-2 border-text-primary bg-transparent py-element leading-normal text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
               />
               <button
                 type="button"
@@ -326,7 +327,7 @@ export default function LocalGamePage() {
           <RoundIndicator currentRound={round} />
 
           <div className="space-y-element flex flex-col items-center pt-section">
-            <h2 className="font-mono text-3xl font-bold text-text-primary lowercase">
+            <h2 className="font-mono text-3xl font-bold text-text-primary">
               pasale el dispositivo a {guesserName}
             </h2>
             <p className="font-sans text-sm text-text-secondary lowercase">
@@ -344,25 +345,26 @@ export default function LocalGamePage() {
       )}
 
       {screen === 'PLAYING' && (
-        <div className="w-full space-y-section flex flex-col items-center text-center">
+        <div className="w-full flex flex-col items-center text-center">
           <RoundIndicator currentRound={round} />
 
-          <TimerDisplay
-            remainingSeconds={remainingSeconds}
-            totalSeconds={timeLimit}
-            isActive={true}
-            roundNumber={round}
-          />
+          <div className="mt-section flex flex-col items-center space-y-element">
+            <TimerDisplay
+              remainingSeconds={remainingSeconds}
+              totalSeconds={timeLimit}
+              isActive={true}
+              roundNumber={round}
+            />
+            <CategoryDisplay categoryName={category} />
+          </div>
 
-          <CategoryDisplay categoryName={category} />
-
-          <p className="font-sans text-sm text-text-secondary lowercase max-w-[28ch]">
+          <p className="mt-section font-sans text-sm text-text-secondary lowercase max-w-[28ch]">
             decí una respuesta válida en voz alta antes que termine el tiempo
           </p>
 
           <button
             onClick={handleAnswerSaid}
-            className="btn-primary w-full"
+            className="btn-primary w-full mt-section"
           >
             ya la dije
           </button>
@@ -377,7 +379,7 @@ export default function LocalGamePage() {
             <h2 className="font-mono text-3xl font-bold text-error lowercase">
               tiempo terminado
             </h2>
-            <p className="font-sans text-sm text-text-secondary lowercase max-w-[28ch]">
+            <p className="font-sans text-sm text-text-secondary max-w-[28ch]">
               pasale el dispositivo de vuelta a {chooserName} para validar la respuesta
             </p>
           </div>
@@ -401,11 +403,11 @@ export default function LocalGamePage() {
           </div>
 
           <p className="font-sans text-sm text-text-secondary lowercase max-w-[32ch]">
-            ¿dijo <span className="text-accent font-medium">{guesserName}</span> una respuesta válida en voz alta?
+            ¿dijo <span className="text-accent font-medium normal-case">{guesserName}</span> una respuesta válida en voz alta?
           </p>
 
           <div className="grid grid-cols-2 gap-element w-full">
-            <button onClick={() => handleValidation(true)} className="btn-primary">
+            <button onClick={() => handleValidation(true)} className="btn-valid">
               sí, fue válida
             </button>
             <button onClick={() => handleValidation(false)} className="btn-danger">

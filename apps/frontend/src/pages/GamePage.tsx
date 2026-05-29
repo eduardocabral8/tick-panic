@@ -61,30 +61,31 @@ export default function GamePage() {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-section">
+    <div className="flex flex-col items-center">
       <ConnectionBanner connected={connected} />
       <RoundIndicator currentRound={state.currentRound} totalRounds={3} />
 
-      <TimerDisplay
-        remainingSeconds={remainingSeconds}
-        totalSeconds={state.currentTurn?.timeLimit ?? 0}
-        isActive={turnActive}
-        roundNumber={state.currentRound}
-        totalRounds={3}
-      />
+      <div className="mt-section flex flex-col items-center space-y-element">
+        <TimerDisplay
+          remainingSeconds={remainingSeconds}
+          totalSeconds={state.currentTurn?.timeLimit ?? 0}
+          isActive={turnActive}
+          roundNumber={state.currentRound}
+          totalRounds={3}
+        />
+        {state.category && (
+          <CategoryDisplay categoryName={state.category.name} />
+        )}
+      </div>
 
-      {state.category && (
-        <CategoryDisplay categoryName={state.category.name} />
-      )}
-
-      <div className="w-full max-w-xs md:max-w-md space-y-element">
+      <div className="mt-section w-full max-w-xs md:max-w-md space-y-element">
         {turnActive && (
           isMyTurn ? (
             <div className="font-sans text-sm font-medium text-accent lowercase tracking-wide">
               {hasSubmitted ? 'tu turno · enviado' : 'tu turno'}
             </div>
           ) : (
-            <div className="font-sans text-sm text-text-secondary lowercase">
+            <div className="font-sans text-sm text-text-secondary">
               turno de {state.players.find((p) => p.id === state.currentTurn?.playerId)?.name ?? ''}
             </div>
           )
@@ -98,11 +99,11 @@ export default function GamePage() {
         {submitError && <div role="alert" aria-live="polite" className="text-error text-sm">{submitError}</div>}
       </div>
 
-      <div className="w-full max-w-xs md:max-w-md">
+      <div className="mt-section w-full max-w-xs md:max-w-md">
         <AnswerList answers={state.answers} />
       </div>
 
-      <div className="w-full max-w-xs md:max-w-md space-y-element">
+      <div className="mt-section w-full max-w-xs md:max-w-md border-t border-text-tertiary pt-section space-y-element">
         {state.players.map((player) => (
           <PlayerRow
             key={player.id}

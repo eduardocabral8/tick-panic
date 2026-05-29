@@ -48,15 +48,17 @@ describe('TimerDisplay', () => {
     expect(onExpired).toHaveBeenCalled();
   });
 
-  it('shows timer-flash on the 3 seconds threshold', () => {
+  it('shows the slowest beat at the 3 seconds threshold', () => {
     const { container } = render(<TimerDisplay remainingSeconds={3} totalSeconds={5} isActive />);
-    const element = container.querySelector('.timer-flash');
+    const element = container.querySelector('.timer-beat-3');
     expect(element).not.toBeNull();
   });
 
-  it('shows timer-pulse-aggressive below 3 seconds', () => {
-    const { container } = render(<TimerDisplay remainingSeconds={2} totalSeconds={5} isActive />);
-    const element = container.querySelector('.timer-pulse-aggressive');
-    expect(element).not.toBeNull();
+  it('accelerates the beat as seconds drop', () => {
+    const two = render(<TimerDisplay remainingSeconds={2} totalSeconds={5} isActive />);
+    expect(two.container.querySelector('.timer-beat-2')).not.toBeNull();
+
+    const one = render(<TimerDisplay remainingSeconds={1} totalSeconds={5} isActive />);
+    expect(one.container.querySelector('.timer-beat-1')).not.toBeNull();
   });
 });

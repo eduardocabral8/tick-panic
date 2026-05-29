@@ -8,9 +8,9 @@ describe('AnswerList', () => {
     expect(screen.getByText('Perro')).toBeDefined();
   });
 
-  it('shows valid answer in accent', () => {
+  it('shows valid answer in valid color', () => {
     const { container } = render(<AnswerList answers={[{ id: '1', text: 'Perro', isValid: true }]} />);
-    expect(container.querySelector('.text-accent')).not.toBeNull();
+    expect(container.querySelector('.text-valid')).not.toBeNull();
   });
 
   it('shows invalid answer in error with line-through', () => {
