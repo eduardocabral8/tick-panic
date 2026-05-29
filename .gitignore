@@ -10,3 +10,6 @@ coverage/
 **/AGENTS.md
 opencode.json
 .opencode/
+.claude/
+.agents/
+skills-lock.json
