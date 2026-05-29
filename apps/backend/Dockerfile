@@ -15,8 +15,8 @@ COPY domain/ ./domain/
 COPY apps/backend/ ./apps/backend/
 
 RUN cd apps/backend && npx prisma generate
-RUN pnpm --filter @15-seconds/domain build
-RUN pnpm --filter @15-seconds/backend build
+RUN pnpm --filter @tick-panic/domain build
+RUN pnpm --filter @tick-panic/backend build
 
 FROM node:20-alpine AS production
 

@@ -11,7 +11,7 @@ import {
   AnswerRepository,
   RoundRepository,
   TimerPort,
-} from '@15-seconds/domain';
+} from '@tick-panic/domain';
 import {
   getGameIdFromTurn,
   broadcastTurnStarted,

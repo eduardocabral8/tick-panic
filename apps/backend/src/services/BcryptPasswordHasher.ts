@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { PasswordHasherPort } from '@15-seconds/domain';
+import { PasswordHasherPort } from '@tick-panic/domain';
 
 export class BcryptPasswordHasher implements PasswordHasherPort {
   private readonly saltRounds = 10;

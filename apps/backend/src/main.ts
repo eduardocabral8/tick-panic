@@ -2,7 +2,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import Fastify, { FastifyInstance, preHandlerHookHandler } from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import { AuthService, addCategory, getAllCategories } from '@15-seconds/domain';
+import { AuthService, addCategory, getAllCategories } from '@tick-panic/domain';
 import { PrismaClient } from '@prisma/client';
 import { PrismaUserRepository } from './repositories/PrismaUserRepository.js';
 import { InMemoryGameRepository } from './repositories/InMemoryGameRepository.js';

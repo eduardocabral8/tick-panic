@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply, preHandlerHookHandler } from 'fastify';
-import { getAllCategories, addCategory, CategoryRepository } from '@15-seconds/domain';
+import { getAllCategories, addCategory, CategoryRepository } from '@tick-panic/domain';
 
 export function registerCategoryRoutes(app: FastifyInstance, categoryRepo: CategoryRepository, adminPreHandler?: preHandlerHookHandler): void {
   app.get('/categories', {

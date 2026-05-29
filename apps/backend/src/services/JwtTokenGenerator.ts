@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { TokenGeneratorPort } from '@15-seconds/domain';
+import { TokenGeneratorPort } from '@tick-panic/domain';
 
 export class JwtTokenGenerator implements TokenGeneratorPort {
   constructor(private secret: string) {}

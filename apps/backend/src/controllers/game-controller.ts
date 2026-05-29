@@ -12,7 +12,7 @@ import {
   CategoryRepository,
   RoundRepository,
   TurnRepository,
-} from '@15-seconds/domain';
+} from '@tick-panic/domain';
 import { broadcastEvent } from '../websocket/gameSocket.js';
 import { broadcastGameFinished } from './helpers.js';
 

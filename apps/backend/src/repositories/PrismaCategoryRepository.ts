@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { CategoryRepository, Category } from '@15-seconds/domain';
+import { CategoryRepository, Category } from '@tick-panic/domain';
 
 export class PrismaCategoryRepository implements CategoryRepository {
   constructor(private prisma: PrismaClient) {}

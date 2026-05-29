@@ -58,11 +58,11 @@ Dependency direction: inward. Domain is the center. Nothing knows about the doma
 
 ```typescript
 // backend/src/repositories/InMemoryGameRepository.ts
-import { GameRepository } from '@15-seconds/domain';
+import { GameRepository } from '@tick-panic/domain';
 // ✅ Implements a domain port
 
 // backend/src/controllers/authController.ts
-import { createUser } from '@15-seconds/domain';
+import { createUser } from '@tick-panic/domain';
 // ✅ Uses a domain use case
 
 // frontend/src/hooks/useWebSocket.ts
@@ -86,7 +86,7 @@ import { FastifyRequest } from 'fastify';
 // ❌ Domain cannot import Fastify
 
 // frontend/src/components/TimerDisplay.tsx
-import { Game } from '@15-seconds/domain';
+import { Game } from '@tick-panic/domain';
 // ❌ Frontend cannot import domain entities
 
 // backend/src/main.ts

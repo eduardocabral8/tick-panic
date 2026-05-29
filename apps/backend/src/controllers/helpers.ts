@@ -1,4 +1,4 @@
-import { TurnRepository, RoundRepository, GameRepository, getGameById } from '@15-seconds/domain';
+import { TurnRepository, RoundRepository, GameRepository, getGameById } from '@tick-panic/domain';
 import { Server as SocketIOServer } from 'socket.io';
 import { broadcastEvent } from '../websocket/gameSocket.js';
 

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { TokenGeneratorPort } from '@15-seconds/domain';
+import { TokenGeneratorPort } from '@tick-panic/domain';
 
 export async function authenticateJWT(request: FastifyRequest, reply: FastifyReply, tokenGenerator: TokenGeneratorPort): Promise<void> {
   const authHeader = request.headers.authorization;

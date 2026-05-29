@@ -1,4 +1,4 @@
-import { TurnRepository, Turn } from '@15-seconds/domain';
+import { TurnRepository, Turn } from '@tick-panic/domain';
 
 export class InMemoryTurnRepository implements TurnRepository {
   private turns = new Map<string, Turn>();

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { Answer, Round, Category, Game } from '@15-seconds/domain';
+import { Answer, Round, Category, Game } from '@tick-panic/domain';
 import { InMemoryAnswerRepository } from './InMemoryAnswerRepository.js';
 
 describe('InMemoryAnswerRepository', () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import Fastify from 'fastify';
-import { AuthService } from '@15-seconds/domain';
+import { AuthService } from '@tick-panic/domain';
 import { JwtTokenGenerator } from '../services/JwtTokenGenerator.js';
 import { BcryptPasswordHasher } from '../services/BcryptPasswordHasher.js';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository.js';

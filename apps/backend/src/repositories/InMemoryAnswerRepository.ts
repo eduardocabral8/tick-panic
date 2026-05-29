@@ -1,4 +1,4 @@
-import { AnswerRepository, Answer } from '@15-seconds/domain';
+import { AnswerRepository, Answer } from '@tick-panic/domain';
 
 export class InMemoryAnswerRepository implements AnswerRepository {
   private answers = new Map<string, Answer>();

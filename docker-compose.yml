@@ -9,7 +9,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - JWT_SECRET=${JWT_SECRET:-default-secret-change-in-production}
-      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-15seconds}
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-tickpanic}
     depends_on:
       - postgres
     healthcheck:
@@ -47,7 +47,7 @@ services:
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-15seconds}
+      POSTGRES_DB: ${DB_NAME:-tickpanic}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:

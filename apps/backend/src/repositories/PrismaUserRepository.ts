@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { UserRepository, User } from '@15-seconds/domain';
+import { UserRepository, User } from '@tick-panic/domain';
 
 export class PrismaUserRepository implements UserRepository {
   constructor(private prisma: PrismaClient) {}

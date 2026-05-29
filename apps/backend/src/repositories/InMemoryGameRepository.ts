@@ -1,4 +1,4 @@
-import { GameRepository, Game } from '@15-seconds/domain';
+import { GameRepository, Game } from '@tick-panic/domain';
 
 export class InMemoryGameRepository implements GameRepository {
   private games = new Map<string, Game>();

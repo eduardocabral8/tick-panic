@@ -1,4 +1,4 @@
-import { UserRepository, User } from '@15-seconds/domain';
+import { UserRepository, User } from '@tick-panic/domain';
 
 export class InMemoryUserRepository implements UserRepository {
   private users = new Map<string, User>();

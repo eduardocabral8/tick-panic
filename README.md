@@ -59,7 +59,7 @@ El servidor es la única fuente de verdad: controla el cronómetro, valida las r
 Monorepo con Clean Architecture. La lógica de negocio vive en `domain/` y no sabe nada de Fastify, Prisma ni React.
 
 ```
-15-seconds/
+tick-panic/
 ├── domain/                  # Lógica de negocio pura
 │   └── src/
 │       ├── entities/        # User, Category, Game...
@@ -108,7 +108,7 @@ cp .env.example .env
 cp .env apps/backend/.env
 
 # 4. Correr migraciones
-pnpm --filter @15-seconds/backend exec prisma migrate dev --name init
+pnpm --filter @tick-panic/backend exec prisma migrate dev --name init
 
 # 5. Iniciar frontend + backend en paralelo
 pnpm run dev

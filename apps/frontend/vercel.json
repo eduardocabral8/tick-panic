@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://tick-panic.onrender.com/api/:path*"
+    }
+  ]
+}

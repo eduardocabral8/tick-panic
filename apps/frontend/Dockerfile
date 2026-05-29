@@ -17,8 +17,8 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 COPY domain/ ./domain/
 COPY apps/frontend/ ./apps/frontend/
 
-RUN pnpm --filter @15-seconds/domain build
-RUN pnpm --filter @15-seconds/frontend build
+RUN pnpm --filter @tick-panic/domain build
+RUN pnpm --filter @tick-panic/frontend build
 
 FROM nginx:alpine
 

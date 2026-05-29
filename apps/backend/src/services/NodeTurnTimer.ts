@@ -1,4 +1,4 @@
-import { TimerPort } from '@15-seconds/domain';
+import { TimerPort } from '@tick-panic/domain';
 
 export class NodeTurnTimer implements TimerPort {
   private timers = new Map<string, ReturnType<typeof setTimeout>>();

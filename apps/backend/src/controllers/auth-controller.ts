@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { createUser, loginUser, AuthService } from '@15-seconds/domain';
+import { createUser, loginUser, AuthService } from '@tick-panic/domain';
 
 export function registerAuthRoutes(app: FastifyInstance, authService: AuthService): void {
   app.post('/auth/register', {

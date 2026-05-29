@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import Fastify from 'fastify';
-import { Category, startGame } from '@15-seconds/domain';
+import { Category, startGame } from '@tick-panic/domain';
 import { InMemoryGameRepository } from '../repositories/InMemoryGameRepository.js';
 import { InMemoryPlayerRepository } from '../repositories/InMemoryPlayerRepository.js';
 import { InMemoryCategoryRepository } from '../repositories/InMemoryCategoryRepository.js';

@@ -17,7 +17,7 @@ describe('categoryController', () => {
 
   it('should list all categories', async () => {
     const { app, categoryRepo } = createApp();
-    const { Category } = await import('@15-seconds/domain');
+    const { Category } = await import('@tick-panic/domain');
     const category = new Category('Animals', ['Dog']);
     categoryRepo.save(category);
 

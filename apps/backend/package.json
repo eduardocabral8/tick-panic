@@ -1,5 +1,5 @@
 {
-  "name": "@15-seconds/backend",
+  "name": "@tick-panic/backend",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -10,7 +10,7 @@
     "dev": "tsx src/main.ts"
   },
   "dependencies": {
-    "@15-seconds/domain": "workspace:*",
+    "@tick-panic/domain": "workspace:*",
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^3.0.0",
     "@prisma/client": "^6.9.0",

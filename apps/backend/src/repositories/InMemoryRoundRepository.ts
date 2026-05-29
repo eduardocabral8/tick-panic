@@ -1,4 +1,4 @@
-import { RoundRepository, Round } from '@15-seconds/domain';
+import { RoundRepository, Round } from '@tick-panic/domain';
 
 export class InMemoryRoundRepository implements RoundRepository {
   private rounds = new Map<string, Round>();

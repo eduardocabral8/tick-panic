@@ -28,7 +28,7 @@ function createMockTimer() {
         return crypto.randomUUID();
       },
       stop: (): void => {},
-    } as import('@15-seconds/domain').TimerPort,
+    } as import('@tick-panic/domain').TimerPort,
     triggerExpire: () => {
       const cb = callbacks[callbacks.length - 1];
       if (cb) cb();
@@ -75,7 +75,7 @@ describe('turnController', () => {
 
   it('should start a turn successfully and broadcast TURN_STARTED', async () => {
     const { app, gameRepo, turnRepo, roundRepo, emitted } = createApp();
-    const { Game, Player, Category } = await import('@15-seconds/domain');
+    const { Game, Player, Category } = await import('@tick-panic/domain');
 
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
@@ -122,7 +122,7 @@ describe('turnController', () => {
 
   it('should submit an answer successfully and broadcast ANSWER_SUBMITTED', async () => {
     const { app, gameRepo, turnRepo, roundRepo, emitted } = createApp();
-    const { Game, Player, Category } = await import('@15-seconds/domain');
+    const { Game, Player, Category } = await import('@tick-panic/domain');
 
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
@@ -168,7 +168,7 @@ describe('turnController', () => {
 
   it('should return 403 when player submits answer for another turn', async () => {
     const { app, gameRepo, turnRepo, roundRepo } = createApp();
-    const { Game, Player, Category } = await import('@15-seconds/domain');
+    const { Game, Player, Category } = await import('@tick-panic/domain');
 
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
@@ -208,7 +208,7 @@ describe('turnController', () => {
 
   it('should auto-finish turn when timer expires and broadcast TURN_ENDED', async () => {
     const { app, gameRepo, turnRepo, roundRepo, emitted, triggerExpire } = createApp();
-    const { Game, Player, Category } = await import('@15-seconds/domain');
+    const { Game, Player, Category } = await import('@tick-panic/domain');
 
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
@@ -260,7 +260,7 @@ describe('turnController', () => {
 
   it('should return 403 when validating own answer', async () => {
     const { app, gameRepo, turnRepo, roundRepo, answerRepo } = createApp();
-    const { Game, Player, Category } = await import('@15-seconds/domain');
+    const { Game, Player, Category } = await import('@tick-panic/domain');
 
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());
@@ -302,7 +302,7 @@ describe('turnController', () => {
 
   it('should return 400 when submitting more than timeLimit answers for the same turn', async () => {
     const { app, gameRepo, turnRepo, roundRepo } = createApp();
-    const { Game, Player, Category } = await import('@15-seconds/domain');
+    const { Game, Player, Category } = await import('@tick-panic/domain');
 
     const game = new Game(new Date());
     const host = new Player('Alice', 'host', new Date());

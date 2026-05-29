@@ -1,4 +1,4 @@
-import { CategoryRepository, Category } from '@15-seconds/domain';
+import { CategoryRepository, Category } from '@tick-panic/domain';
 
 export class InMemoryCategoryRepository implements CategoryRepository {
   private categories = new Map<string, Category>();
