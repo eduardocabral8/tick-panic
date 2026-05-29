@@ -183,6 +183,25 @@
     animation: panic-shake 620ms var(--ease-out) 240ms both;
   }
 
+  .i-stem-clipped {
+    clip-path: inset(24% 0 0 0);
+  }
+
+  .i-dot {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 0.18em;
+    height: 0.18em;
+    background-color: currentColor;
+    bottom: 0.82em;
+    transform-origin: center bottom;
+  }
+
+  .animate-i-dot {
+    animation: i-dot-bounce 620ms var(--ease-out) 240ms both;
+  }
+
   @keyframes timer-pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.02); }
@@ -240,6 +259,30 @@
     82% { transform: translateX(0.02em) rotate(0.5deg); }
     100% { opacity: 1; transform: translateX(0) rotate(0); }
   }
+
+  @keyframes i-dot-bounce {
+    0% {
+      transform: translate(-50%, 0);
+    }
+    15% {
+      transform: translate(-50%, 0);
+    }
+    40% {
+      transform: translate(-50%, -0.32em);
+    }
+    60% {
+      transform: translate(-50%, -0.35em);
+    }
+    80% {
+      transform: translate(-50%, 0);
+    }
+    90% {
+      transform: translate(-50%, -0.05em);
+    }
+    100% {
+      transform: translate(-50%, 0);
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -249,7 +292,8 @@
   .timer-beat-1,
   .fade-up-score,
   .word-rise,
-  .panic-shake {
+  .panic-shake,
+  .animate-i-dot {
     animation: none;
   }
   *,
@@ -260,3 +304,4 @@
     animation-iteration-count: 1 !important;
   }
 }
+
