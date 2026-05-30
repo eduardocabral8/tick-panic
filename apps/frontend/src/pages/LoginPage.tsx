@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth.js';
 import Wordmark from '../components/Wordmark.js';
 import RulesOverlay from '../components/RulesOverlay.js';
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login, register, error } = useAuth();
   const navigate = useNavigate();
 
@@ -69,15 +71,29 @@ export default function LoginPage() {
               autoComplete="username"
               className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
             />
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="contraseña"
-              aria-label="contraseña"
-              autoComplete={isRegistering ? 'new-password' : 'current-password'}
-              className="w-full border-b-2 border-text-primary bg-transparent py-element text-text-primary placeholder:text-text-secondary focus:border-accent focus:outline-none"
-            />
+            <div className="relative w-full flex items-center border-b-2 border-text-primary focus-within:border-accent">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="contraseña"
+                aria-label="contraseña"
+                autoComplete={isRegistering ? 'new-password' : 'current-password'}
+                className="w-full bg-transparent py-element pr-10 text-text-primary placeholder:text-text-secondary focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-0 py-element text-text-secondary hover:text-text-primary transition-colors focus:outline-none"
+                aria-label={showPassword ? 'ocultar contraseña' : 'mostrar contraseña'}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            </div>
             {error && (
               <div role="alert" aria-live="polite" className="text-error text-sm">
                 {error}
@@ -91,7 +107,10 @@ export default function LoginPage() {
             <div className="pt-3">
               <button
                 type="button"
-                onClick={() => setIsRegistering(!isRegistering)}
+                onClick={() => {
+                  setIsRegistering(!isRegistering);
+                  setShowPassword(false);
+                }}
                 className="btn-ghost w-full"
               >
                 {isRegistering ? 'ya tengo cuenta' : 'crear cuenta'}

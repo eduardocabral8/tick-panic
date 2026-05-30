@@ -44,4 +44,37 @@ describe('LoginPage', () => {
     fireEvent.click(toggle);
     expect(screen.getByText('registrarse')).toBeDefined();
   });
+
+  it('toggles password visibility when toggle button is clicked', () => {
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByText(/jugar online/i));
+    const passwordInput = screen.getByPlaceholderText('contraseña') as HTMLInputElement;
+    expect(passwordInput.type).toBe('password');
+    const toggleButton = screen.getByLabelText('mostrar contraseña');
+    fireEvent.click(toggleButton);
+    expect(passwordInput.type).toBe('text');
+    expect(screen.getByLabelText('ocultar contraseña')).toBeDefined();
+    fireEvent.click(screen.getByLabelText('ocultar contraseña'));
+    expect(passwordInput.type).toBe('password');
+  });
+
+  it('resets password visibility when switching between login and registration', () => {
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByText(/jugar online/i));
+    const passwordInput = screen.getByPlaceholderText('contraseña') as HTMLInputElement;
+    const toggleButton = screen.getByLabelText('mostrar contraseña');
+    fireEvent.click(toggleButton);
+    expect(passwordInput.type).toBe('text');
+    const registerToggle = screen.getByText('crear cuenta');
+    fireEvent.click(registerToggle);
+    expect(passwordInput.type).toBe('password');
+  });
 });
